@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -38,6 +39,17 @@ public class NuevoUser extends AppCompatActivity {
         bbdd = FirebaseDatabase.getInstance().getReference("usuarios");
     }
 
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.btnNuevoAñadir:
+                Toast.makeText(getApplicationContext(), "Guardando nuevo usuario...", Toast.LENGTH_SHORT).show();
+
+                //Procedemos a guardar nuevo usuario
+                guardarNuevoUser();
+                break;
+        }
+    }
+
     //Menu opciones para guardar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -47,12 +59,14 @@ public class NuevoUser extends AppCompatActivity {
         return true;
     }
 
+    //Gestion eventos botones menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.mnSave:
                 Toast.makeText(getApplicationContext(),"Guardando nuevo usuario...",Toast.LENGTH_SHORT).show();
 
+                //Procedemos a guardar nuevo usuario
                 guardarNuevoUser();
                 break;
             case R.id.mnCancel:
@@ -63,6 +77,7 @@ public class NuevoUser extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Metodo guardar nuevo usuario
     private void guardarNuevoUser() {
         //Obtener valores
         String usuario = editUsuario.getText().toString();
@@ -71,16 +86,14 @@ public class NuevoUser extends AppCompatActivity {
         String apedillos = editApedillos.getText().toString();
         String direccion = editDireccion.getText().toString();
 
+        //Creamos objeto usuario con sus valores
         Usuario nuevo = new Usuario(usuario,nombre,apedillos,correo,direccion);
 
-        String clave = bbdd.push().getKey();
-        Toast.makeText(getApplicationContext(), "Clave generada: " + clave, Toast.LENGTH_SHORT).show();
+        //Creamos clave del "Registro"
+        String clave = nuevo.getUsuario();
 
-        try{
-            bbdd.child(clave).setValue(nuevo);
-        } catch (Exception e){
-            Log.w("#TEMP", e);
-        }
+        //Enviamos el objeto a la BBDD de FireBase
+        bbdd.child(clave).setValue(nuevo);
 
         Toast.makeText(getApplicationContext(), "Usuario " + nuevo.getUsuario() + " registrado", Toast.LENGTH_LONG).show();
     }
