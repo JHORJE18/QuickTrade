@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Usuario:"
-        android:inputType="textPersonName" />
+        android:inputType="textCapCharacters" />
 
     <EditText
         android:id="@+id/editNuevoCorreo"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Nombre:"
-        android:inputType="textPersonName" />
+        android:inputType="textCapWords|textPersonName" />
 
     <EditText
         android:id="@+id/editNuevoApedillos"
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Apedillos:"
-        android:inputType="textPersonName" />
+        android:inputType="textCapWords|textPersonName" />
 
     <EditText
         android:id="@+id/editNuevoDireccion"
@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Dirección:"
-        android:inputType="textPostalAddress" />
+        android:inputType="textCapWords|textCapSentences|textAutoComplete|textPostalAddress" />
 
     <Space
         android:layout_width="match_parent"
@@ -68,6 +68,8 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:clickable="true"
         android:text="Registrar nuevo usuario" />
 
 </LinearLayout>
