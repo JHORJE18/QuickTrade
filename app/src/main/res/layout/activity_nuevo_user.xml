@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:orientation="vertical"
+    tools:context="com.jhorje18.quicktrade.NuevoUser">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Registrar usuario"
+        android:textAlignment="center"
+        android:textSize="21sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editNuevoUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Usuario:"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editNuevoCorreo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Correo:"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/editNuevoNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Nombre:"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editNuevoApedillos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Apedillos:"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editNuevoDireccion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Dirección:"
+        android:inputType="textPostalAddress" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btnNuevoAñadir"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registrar nuevo usuario" />
+
+</LinearLayout>

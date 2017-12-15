@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/mnSave"
+        android:icon="@drawable/save_icon"
+        android:title="Guardar"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/mnCancel"
+        android:icon="@drawable/close_icon"
+        android:title="Cancelar"
+        app:showAsAction="always" />
+</menu>
