@@ -7,66 +7,57 @@ package com.jhorje18.quicktrade.model;
 public class Usuario {
 
     //Variables
-    String USUARIO;
-    String NOMBRE;
-    String APEDILLOS;
-    String CORREO;
-    String DIRECCION;
+    String usuario;
+    String nombre;
+    String apedillos;
+    String correo;
+    String direccion;
 
-    public Usuario(String USUARIO, String NOMBRE, String APEDILLOS, String CORREO, String DIRECCION) {
-        this.USUARIO = USUARIO;
-        this.NOMBRE = NOMBRE;
-        this.APEDILLOS = APEDILLOS;
-        this.CORREO = CORREO;
-        this.DIRECCION = DIRECCION;
+    public Usuario(String usuario, String nombre, String apedillos, String correo, String direccion) {
+        this.usuario = usuario;
+        this.nombre = nombre;
+        this.apedillos = apedillos;
+        this.correo = correo;
+        this.direccion = direccion;
     }
 
-    public String getUSUARIO() {
-        return USUARIO;
+    public String getUsuario() {
+        return usuario;
     }
 
-    public void setUSUARIO(String USUARIO) {
-        this.USUARIO = USUARIO;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
-    public String getNOMBRE() {
-        return NOMBRE;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setNOMBRE(String NOMBRE) {
-        this.NOMBRE = NOMBRE;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public String getAPEDILLOS() {
-        return APEDILLOS;
+    public String getApedillos() {
+        return apedillos;
     }
 
-    public void setAPEDILLOS(String APEDILLOS) {
-        this.APEDILLOS = APEDILLOS;
+    public void setApedillos(String apedillos) {
+        this.apedillos = apedillos;
     }
 
-    public String getCORREO() {
-        return CORREO;
+    public String getCorreo() {
+        return correo;
     }
 
-    public void setCORREO(String CORREO) {
-        this.CORREO = CORREO;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
-    public String getDIRECCION() {
-        return DIRECCION;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setDIRECCION(String DIRECCION) {
-        this.DIRECCION = DIRECCION;
-    }
-
-    public String toString(){
-        return USUARIO + "{" +
-                "CORREO='" + CORREO + "\'," +
-                "NOMBRE='" + NOMBRE + "\'," +
-                "APEDILLOS='" + APEDILLOS + "\'" +
-                "DIRECCION='" + DIRECCION + "\'" +
-                "}";
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 }
