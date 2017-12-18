@@ -9,15 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-import android.widget.ListView;
->>>>>>> parent of f278f51... Revert "Error"
-=======
-import android.widget.ListView;
->>>>>>> parent of f278f51... Revert "Error"
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -34,15 +25,7 @@ public class NuevoUser extends AppCompatActivity {
 
     //Variables
     EditText editUsuario, editCorreo, editNombre, editApedillos, editDireccion;
-<<<<<<< HEAD
-<<<<<<< HEAD
-    Spinner spin_grupo;
-=======
     ArrayList<String> listaUsuarios;
->>>>>>> parent of f278f51... Revert "Error"
-=======
-    ArrayList<String> listaUsuarios;
->>>>>>> parent of f278f51... Revert "Error"
 
     DatabaseReference bbdd;
 
@@ -57,7 +40,6 @@ public class NuevoUser extends AppCompatActivity {
         editNombre = (EditText) findViewById(R.id.editNuevoNombre);
         editApedillos = (EditText) findViewById(R.id.editNuevoApedillos);
         editDireccion = (EditText) findViewById(R.id.editNuevoDireccion);
-        spin_grupo = (Spinner) findViewById(R.id.lista);
 
         listaUsuarios = new ArrayList<String>();
 
@@ -66,42 +48,16 @@ public class NuevoUser extends AppCompatActivity {
         //Obtener BBDD FireBase
         bbdd = FirebaseDatabase.getInstance().getReference("usuarios");
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        bbdd.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                ArrayAdapter<String> adaptador;
-=======
-=======
->>>>>>> parent of f278f51... Revert "Error"
         //Añadir evento al detectar nuevo valor en BBDD
         bbdd.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Obtenemos nombres de usuario
-<<<<<<< HEAD
->>>>>>> parent of f278f51... Revert "Error"
-=======
->>>>>>> parent of f278f51... Revert "Error"
-                ArrayList<String> listado = new ArrayList<String>();
-
                 for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
                     Usuario disco = datasnapshot.getValue(Usuario.class);
                     String titulo = disco.getUsuario();
-                    listado.add(titulo);
+                    listaUsuarios.add(titulo);
                 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-                adaptador = new ArrayAdapter<String>(NuevoUser.this,android.R.layout.simple_list_item_1,listado);
-                spin_grupo.setAdapter(adaptador);
-
-=======
->>>>>>> parent of f278f51... Revert "Error"
-=======
->>>>>>> parent of f278f51... Revert "Error"
             }
 
             @Override
@@ -109,13 +65,6 @@ public class NuevoUser extends AppCompatActivity {
 
             }
         });
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of f278f51... Revert "Error"
-=======
->>>>>>> parent of f278f51... Revert "Error"
     }
 
     public void onClick(View v){
@@ -183,13 +132,18 @@ public class NuevoUser extends AppCompatActivity {
     private boolean validarDatos() {
 
         //Evalua campos no vacios
-        if (editUsuario.getText().toString().length() != 0 || editNombre.getText().toString().length() != 0 || editApedillos.getText().toString().length() != 0 || editCorreo.getText().toString().length() != 0 || editDireccion.getText().toString().length() != 0){
+        if (editUsuario.getText().toString().isEmpty() || editNombre.getText().toString().isEmpty() || editApedillos.getText().toString().isEmpty() || editCorreo.getText().toString().isEmpty() || editDireccion.getText().toString().isEmpty()){
             Toast.makeText(getApplicationContext(),"Todos los campos son obligatorios",Toast.LENGTH_SHORT).show();
             return false;
         }
 
         //Evalua usuario UNICO
         for (int i=0;i<listaUsuarios.size();i++){
+            if (editUsuario.getText().toString().equals(listaUsuarios.get(i))){
+                Toast.makeText(getApplicationContext(), "Ya existe el usuario " + listaUsuarios.get(i) , Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
 
         return true;
     }
