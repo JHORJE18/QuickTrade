@@ -9,6 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+<<<<<<< HEAD
+=======
+import android.widget.ListView;
+>>>>>>> parent of f278f51... Revert "Error"
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -26,7 +30,11 @@ public class NuevoUser extends AppCompatActivity {
 
     //Variables
     EditText editUsuario, editCorreo, editNombre, editApedillos, editDireccion;
+<<<<<<< HEAD
     Spinner spin_grupo;
+=======
+    ArrayList<String> listaUsuarios;
+>>>>>>> parent of f278f51... Revert "Error"
 
     DatabaseReference bbdd;
 
@@ -43,14 +51,24 @@ public class NuevoUser extends AppCompatActivity {
         editDireccion = (EditText) findViewById(R.id.editNuevoDireccion);
         spin_grupo = (Spinner) findViewById(R.id.lista);
 
+        listaUsuarios = new ArrayList<String>();
+
         //Obtener BBDD FireBase
         bbdd = FirebaseDatabase.getInstance().getReference("usuarios");
 
+<<<<<<< HEAD
         bbdd.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 ArrayAdapter<String> adaptador;
+=======
+        //Añadir evento al detectar nuevo valor en BBDD
+        bbdd.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Obtenemos nombres de usuario
+>>>>>>> parent of f278f51... Revert "Error"
                 ArrayList<String> listado = new ArrayList<String>();
 
                 for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
@@ -58,10 +76,13 @@ public class NuevoUser extends AppCompatActivity {
                     String titulo = disco.getUsuario();
                     listado.add(titulo);
                 }
+<<<<<<< HEAD
 
                 adaptador = new ArrayAdapter<String>(NuevoUser.this,android.R.layout.simple_list_item_1,listado);
                 spin_grupo.setAdapter(adaptador);
 
+=======
+>>>>>>> parent of f278f51... Revert "Error"
             }
 
             @Override
@@ -69,7 +90,10 @@ public class NuevoUser extends AppCompatActivity {
 
             }
         });
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of f278f51... Revert "Error"
     }
 
     public void onClick(View v){
@@ -119,15 +143,32 @@ public class NuevoUser extends AppCompatActivity {
         String apedillos = editApedillos.getText().toString();
         String direccion = editDireccion.getText().toString();
 
-        //Creamos objeto usuario con sus valores
-        Usuario nuevo = new Usuario(usuario,nombre,apedillos,correo,direccion);
+        //Metodo validar campos
+        if (validarDatos()){
+            //Creamos objeto usuario con sus valores
+            Usuario nuevo = new Usuario(usuario,nombre,apedillos,correo,direccion);
 
-        //Creamos clave del "Registro"
-        String clave = nuevo.getUsuario();
+            //Creamos clave del "Registro"
+            String clave = nuevo.getUsuario();
 
-        //Enviamos el objeto a la BBDD de FireBase
-        bbdd.child(clave).setValue(nuevo);
+            //Enviamos el objeto a la BBDD de FireBase
+            bbdd.child(clave).setValue(nuevo);
 
-        Toast.makeText(getApplicationContext(), "Usuario " + nuevo.getUsuario() + " registrado", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Usuario " + nuevo.getUsuario() + " registrado", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private boolean validarDatos() {
+
+        //Evalua campos no vacios
+        if (editUsuario.getText().toString().length() != 0 || editNombre.getText().toString().length() != 0 || editApedillos.getText().toString().length() != 0 || editCorreo.getText().toString().length() != 0 || editDireccion.getText().toString().length() != 0){
+            Toast.makeText(getApplicationContext(),"Todos los campos son obligatorios",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        //Evalua usuario UNICO
+        for (int i=0;i<listaUsuarios.size();i++){
+
+        return true;
     }
 }

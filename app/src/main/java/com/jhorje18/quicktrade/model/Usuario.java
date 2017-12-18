@@ -24,7 +24,10 @@ public class Usuario {
     public Usuario(){
 
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of f278f51... Revert "Error"
     public String getUsuario() {
         return usuario;
     }
