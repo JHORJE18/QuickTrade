@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+import android.widget.ListView;
+>>>>>>> parent of f278f51... Revert "Error"
 =======
 import android.widget.ListView;
 >>>>>>> parent of f278f51... Revert "Error"
@@ -31,7 +35,11 @@ public class NuevoUser extends AppCompatActivity {
     //Variables
     EditText editUsuario, editCorreo, editNombre, editApedillos, editDireccion;
 <<<<<<< HEAD
+<<<<<<< HEAD
     Spinner spin_grupo;
+=======
+    ArrayList<String> listaUsuarios;
+>>>>>>> parent of f278f51... Revert "Error"
 =======
     ArrayList<String> listaUsuarios;
 >>>>>>> parent of f278f51... Revert "Error"
@@ -53,9 +61,12 @@ public class NuevoUser extends AppCompatActivity {
 
         listaUsuarios = new ArrayList<String>();
 
+        listaUsuarios = new ArrayList<String>();
+
         //Obtener BBDD FireBase
         bbdd = FirebaseDatabase.getInstance().getReference("usuarios");
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         bbdd.addValueEventListener(new ValueEventListener() {
             @Override
@@ -63,11 +74,16 @@ public class NuevoUser extends AppCompatActivity {
 
                 ArrayAdapter<String> adaptador;
 =======
+=======
+>>>>>>> parent of f278f51... Revert "Error"
         //Añadir evento al detectar nuevo valor en BBDD
         bbdd.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Obtenemos nombres de usuario
+<<<<<<< HEAD
+>>>>>>> parent of f278f51... Revert "Error"
+=======
 >>>>>>> parent of f278f51... Revert "Error"
                 ArrayList<String> listado = new ArrayList<String>();
 
@@ -77,10 +93,13 @@ public class NuevoUser extends AppCompatActivity {
                     listado.add(titulo);
                 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
                 adaptador = new ArrayAdapter<String>(NuevoUser.this,android.R.layout.simple_list_item_1,listado);
                 spin_grupo.setAdapter(adaptador);
 
+=======
+>>>>>>> parent of f278f51... Revert "Error"
 =======
 >>>>>>> parent of f278f51... Revert "Error"
             }
@@ -91,7 +110,10 @@ public class NuevoUser extends AppCompatActivity {
             }
         });
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of f278f51... Revert "Error"
 =======
 >>>>>>> parent of f278f51... Revert "Error"
     }
