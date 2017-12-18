@@ -21,9 +21,6 @@ public class Usuario {
         this.direccion = direccion;
     }
 
-    public Usuario(){
-
-    }
     public String getUsuario() {
         return usuario;
     }
