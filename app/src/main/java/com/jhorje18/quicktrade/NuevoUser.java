@@ -7,19 +7,26 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jhorje18.quicktrade.model.Usuario;
 
+import java.util.ArrayList;
 import java.util.zip.Inflater;
 
 public class NuevoUser extends AppCompatActivity {
 
     //Variables
     EditText editUsuario, editCorreo, editNombre, editApedillos, editDireccion;
+    Spinner spin_grupo;
 
     DatabaseReference bbdd;
 
@@ -34,9 +41,35 @@ public class NuevoUser extends AppCompatActivity {
         editNombre = (EditText) findViewById(R.id.editNuevoNombre);
         editApedillos = (EditText) findViewById(R.id.editNuevoApedillos);
         editDireccion = (EditText) findViewById(R.id.editNuevoDireccion);
+        spin_grupo = (Spinner) findViewById(R.id.lista);
 
         //Obtener BBDD FireBase
         bbdd = FirebaseDatabase.getInstance().getReference("usuarios");
+
+        bbdd.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                ArrayAdapter<String> adaptador;
+                ArrayList<String> listado = new ArrayList<String>();
+
+                for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
+                    Usuario disco = datasnapshot.getValue(Usuario.class);
+                    String titulo = disco.getUsuario();
+                    listado.add(titulo);
+                }
+
+                adaptador = new ArrayAdapter<String>(NuevoUser.this,android.R.layout.simple_list_item_1,listado);
+                spin_grupo.setAdapter(adaptador);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     public void onClick(View v){
