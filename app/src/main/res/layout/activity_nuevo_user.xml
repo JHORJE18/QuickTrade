@@ -58,15 +58,22 @@
         android:hint="Dirección:"
         android:inputType="textCapWords|textCapSentences|textAutoComplete|textPostalAddress" />
 
-    <Spinner
-        android:id="@+id/lista"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <Space
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/txtNuevoLista"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Usuarios registrados:"
+        android:textSize="21sp" />
+
+    <Spinner
+        android:id="@+id/lista"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/btnNuevoAñadir"

@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +26,7 @@ public class NuevoUser extends AppCompatActivity {
 
     //Variables
     EditText editUsuario, editCorreo, editNombre, editApedillos, editDireccion;
+    Spinner spin_users;
     ArrayList<String> listaUsuarios;
 
     DatabaseReference bbdd;
@@ -40,8 +42,7 @@ public class NuevoUser extends AppCompatActivity {
         editNombre = (EditText) findViewById(R.id.editNuevoNombre);
         editApedillos = (EditText) findViewById(R.id.editNuevoApedillos);
         editDireccion = (EditText) findViewById(R.id.editNuevoDireccion);
-
-        listaUsuarios = new ArrayList<String>();
+        spin_users = (Spinner) findViewById(R.id.lista);
 
         listaUsuarios = new ArrayList<String>();
 
@@ -52,12 +53,20 @@ public class NuevoUser extends AppCompatActivity {
         bbdd.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                ArrayAdapter<String> adaptador;
+                ArrayList<String> listado = new ArrayList<String>();
+
                 //Obtenemos nombres de usuario
                 for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
-                    Usuario disco = datasnapshot.getValue(Usuario.class);
-                    String titulo = disco.getUsuario();
-                    listaUsuarios.add(titulo);
+                    Usuario usuarioTEMP = datasnapshot.getValue(Usuario.class);
+                    String userUsuario = usuarioTEMP.getUsuario();
+                    listaUsuarios.add(userUsuario);
+                    listado.add(userUsuario);
                 }
+
+                adaptador = new ArrayAdapter<String>(NuevoUser.this,android.R.layout.simple_list_item_1,listado);
+                spin_users.setAdapter(adaptador);
             }
 
             @Override
