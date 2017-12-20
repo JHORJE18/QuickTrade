@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:orientation="vertical"
+    tools:context="com.jhorje18.quicktrade.NuevoUser">
+
+    <TextView
+        android:id="@+id/txtEditTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Editar usuario"
+        android:textAlignment="center"
+        android:textSize="21sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtNuevoLista"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="Usuario:"
+            android:textSize="21sp" />
+
+        <Spinner
+            android:id="@+id/listaEditar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+
+        <ImageButton
+            android:id="@+id/btnEditReload"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:backgroundTint="@android:color/black"
+            android:contentDescription="Cargar usuario"
+            android:onClick="onClick"
+            app:srcCompat="@drawable/download_icon" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/editEditCorreo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Correo:"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/editEditNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Nombre:"
+        android:inputType="textCapWords|textPersonName" />
+
+    <EditText
+        android:id="@+id/editEditApedillos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Apedillos:"
+        android:inputType="textCapWords|textPersonName" />
+
+    <EditText
+        android:id="@+id/editEditDireccion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Dirección:"
+        android:inputType="textCapWords|textCapSentences|textAutoComplete|textPostalAddress" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btnEditEditar"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/holo_blue_bright"
+        android:text="Editar campos" />
+
+    <Button
+        android:id="@+id/btnEditEliminar"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="onClick"
+        android:text="Eliminar usuario" />
+
+</LinearLayout>

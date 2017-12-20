@@ -19,6 +19,8 @@
         <activity
             android:name=".NuevoUser"
             android:parentActivityName=".MainActivity" />
+        <activity android:name=".EditarUser"
+            android:parentActivityName=".NuevoUser"></activity>
     </application>
 
 </manifest>

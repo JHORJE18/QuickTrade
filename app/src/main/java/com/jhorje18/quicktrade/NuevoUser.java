@@ -1,5 +1,7 @@
 package com.jhorje18.quicktrade;
 
+import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -110,6 +112,10 @@ public class NuevoUser extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Cancelando...", Toast.LENGTH_SHORT).show();
                 finish();
                 break;
+            case R.id.mmEdit:
+                Intent nueva = new Intent(this, EditarUser.class);
+                startActivity(nueva);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -149,6 +155,7 @@ public class NuevoUser extends AppCompatActivity {
         //Evalua usuario UNICO
         for (int i=0;i<listaUsuarios.size();i++){
             if (editUsuario.getText().toString().equals(listaUsuarios.get(i))){
+                Snackbar.make(getCurrentFocus(),"Usuario " + editUsuario.getText().toString() + " ya existe", Snackbar.LENGTH_LONG).show();
                 Toast.makeText(getApplicationContext(), "Ya existe el usuario " + listaUsuarios.get(i) , Toast.LENGTH_SHORT).show();
                 return false;
             }
