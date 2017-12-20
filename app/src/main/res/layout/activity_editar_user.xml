@@ -93,6 +93,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/holo_blue_bright"
+        android:onClick="onClick"
         android:text="Editar campos" />
 
     <Button

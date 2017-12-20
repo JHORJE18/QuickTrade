@@ -104,6 +104,8 @@ public class EditarUser extends AppCompatActivity {
                                 bbdd.child(clave).child("nombre").setValue(editNombre.getText().toString());
                                 bbdd.child(clave).child("apedillos").setValue(editApedillos.getText().toString());
                                 bbdd.child(clave).child("direccion").setValue(editDireccion.getText().toString());
+
+                                Toast.makeText(EditarUser.this, "Valores editados correctamente", Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -116,7 +118,29 @@ public class EditarUser extends AppCompatActivity {
                 }
                 break;
             case R.id.btnEditEliminar:
+                //Procedemos a eliminar
+                Query q = bbdd.orderByChild("usuario").equalTo((String) spin_users.getSelectedItem());
 
+                //Si ha encontrado algun registro unico
+                q.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                            String clave = dataSnapshot1.getKey();
+                            DatabaseReference ref = bbdd.child(clave);
+
+                            ref.removeValue();
+                            Toast.makeText(EditarUser.this, "Usuario " + spin_users.getSelectedItem() + " eliminado!", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
                 break;
             case R.id.btnEditReload:
                 cargarUsuario(infoUsuarios.get(spin_users.getSelectedItemPosition()));

@@ -21,24 +21,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Get a reference to our posts
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("usuarios");
-
-        // Attach a listener to read the data at our posts reference
-            ref.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Usuario post = dataSnapshot.getValue(Usuario.class);
-                    Toast.makeText(getApplicationContext(),"Dato recibio " + post.getUsuario() , Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    System.out.println("The read failed: " + databaseError.getCode());
-                }
-            });
     }
 
     //Crear menu opciones superior
