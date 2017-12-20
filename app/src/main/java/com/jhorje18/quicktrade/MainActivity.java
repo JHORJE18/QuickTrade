@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.mnNuevoUser:
                 Intent nueva = new Intent(this, NuevoUser.class);
                 startActivity(nueva);
+                overridePendingTransition(R.anim.left_out, R.anim.left_in);
                 break;
         }
         return super.onOptionsItemSelected(item);

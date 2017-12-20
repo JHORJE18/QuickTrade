@@ -115,6 +115,7 @@ public class NuevoUser extends AppCompatActivity {
             case R.id.mmEdit:
                 Intent nueva = new Intent(this, EditarUser.class);
                 startActivity(nueva);
+                overridePendingTransition(R.anim.left_in, R.anim.left_out);
                 break;
         }
         return super.onOptionsItemSelected(item);
