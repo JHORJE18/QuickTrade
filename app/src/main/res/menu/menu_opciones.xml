@@ -3,6 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/mnMostrarUser"
+        android:icon="@drawable/people_icon"
+        android:title="Mostrar usuarios"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/mnNuevoUser"
         android:icon="@drawable/add_user"
         android:title="Registrar usuario"

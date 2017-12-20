@@ -18,9 +18,16 @@
         </activity>
         <activity
             android:name=".NuevoUser"
+            android:label="Añadir usuario"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".EditarUser"
-            android:parentActivityName=".NuevoUser"></activity>
+        <activity
+            android:name=".EditarUser"
+            android:label="Editar usuario"
+            android:parentActivityName=".NuevoUser" />
+        <activity
+            android:name=".MostrarUsers"
+            android:label="Lista usuarios registrados"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>
