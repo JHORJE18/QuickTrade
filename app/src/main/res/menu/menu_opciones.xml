@@ -2,6 +2,9 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:id="@+id/mnLogin"
+        android:title="Iniciar sesión o Registrarse" />
+
     <item
         android:id="@+id/mnMostrarUser"
         android:icon="@drawable/people_icon"
