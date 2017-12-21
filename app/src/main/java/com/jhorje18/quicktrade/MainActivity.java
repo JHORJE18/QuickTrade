@@ -46,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(mostrar);
                 overridePendingTransition(R.anim.left_in, R.anim.left_out);
                 break;
+            case R.id.mnLogin:
+                Intent login = new Intent(this, Login.class);
+                startActivity(login);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
