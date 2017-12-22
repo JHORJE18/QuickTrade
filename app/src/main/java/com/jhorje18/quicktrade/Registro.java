@@ -1,7 +1,9 @@
 package com.jhorje18.quicktrade;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -89,6 +91,9 @@ public class Registro extends AppCompatActivity {
                 boolean ok = validarCampos();
                 break;
             case R.id.btnRegIniciar:
+                Intent nueva = new Intent(this, Login.class);
+                startActivity(nueva);
+                finish();
                 break;
         }
     }

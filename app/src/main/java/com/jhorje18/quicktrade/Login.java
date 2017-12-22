@@ -1,5 +1,6 @@
 package com.jhorje18.quicktrade;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,7 +37,7 @@ public class Login extends AppCompatActivity {
         btnRegistro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registrar(editCorreo.getText().toString(), editPass.getText().toString());
+                ventanaRegistro();
             }
         });
 
@@ -46,6 +47,12 @@ public class Login extends AppCompatActivity {
                 login(editCorreo.getText().toString(), editPass.getText().toString());
             }
         });
+    }
+
+    private void ventanaRegistro() {
+        Intent nueva = new Intent(this, Registro.class);
+        startActivity(nueva);
+        finish();
     }
 
     private void registrar(final String email, String password) {

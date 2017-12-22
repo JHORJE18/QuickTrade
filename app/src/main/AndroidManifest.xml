@@ -28,7 +28,8 @@
             android:name=".MostrarUsers"
             android:label="Lista usuarios registrados"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".Login" />
+        <activity android:name=".Login"
+            android:label="Iniciar sesión"/>
         <activity android:name=".Registro"
             android:label="Crear cuenta"></activity>
     </application>
