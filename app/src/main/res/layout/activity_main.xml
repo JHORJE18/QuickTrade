@@ -7,7 +7,7 @@
     tools:context="com.jhorje18.quicktrade.MainActivity">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/txtPrincipal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"

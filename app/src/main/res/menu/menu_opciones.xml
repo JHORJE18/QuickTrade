@@ -15,4 +15,7 @@
         android:icon="@drawable/add_user"
         android:title="Registrar usuario"
         app:showAsAction="always" />
+
+    <item android:id="@+id/mnCerrar"
+        android:title="Cerrar Sesión" />
 </menu>

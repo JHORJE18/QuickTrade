@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,10 +20,35 @@ import com.jhorje18.quicktrade.model.Usuario;
 
 public class MainActivity extends AppCompatActivity {
 
+    FirebaseUser user;
+    TextView txt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        txt = (TextView) findViewById(R.id.txtPrincipal);
+
+        recargar();
+    }
+
+    @Override
+    protected void onResume() {
+        recargar();
+        super.onResume();
+    }
+
+    private void recargar() {
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            Toast.makeText(this, "Usuario detectado! " + user.getEmail(), Toast.LENGTH_SHORT).show();
+            txt.setText("Hola " + user.getEmail());
+        } else {
+            Toast.makeText(this, "Ningun usuario", Toast.LENGTH_SHORT).show();
+            txt.setText("Nadie detectado!");
+        }
     }
 
     //Crear menu opciones superior
@@ -49,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.mnLogin:
                 Intent login = new Intent(this, Login.class);
                 startActivity(login);
+                break;
+            case R.id.mnCerrar:
+                FirebaseAuth.getInstance().signOut();
+                recargar();
                 break;
         }
         return super.onOptionsItemSelected(item);

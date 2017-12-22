@@ -55,6 +55,7 @@ public class Login extends AppCompatActivity {
         finish();
     }
 
+    //TODO Trasladar registro a la nueva activity
     private void registrar(final String email, String password) {
 
         mAuth = FirebaseAuth.getInstance();
@@ -76,6 +77,7 @@ public class Login extends AppCompatActivity {
                 });
     }
 
+    //TODO Mejorar login y guardar en las preferencias el UID
     private void login(final String email, String password) {
 
         mAuth = FirebaseAuth.getInstance();
