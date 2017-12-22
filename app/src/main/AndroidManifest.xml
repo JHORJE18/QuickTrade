@@ -28,7 +28,9 @@
             android:name=".MostrarUsers"
             android:label="Lista usuarios registrados"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".Login"></activity>
+        <activity android:name=".Login" />
+        <activity android:name=".Registro"
+            android:label="Crear cuenta"></activity>
     </application>
 
 </manifest>
