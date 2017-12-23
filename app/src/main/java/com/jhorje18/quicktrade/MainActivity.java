@@ -1,6 +1,8 @@
 package com.jhorje18.quicktrade;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,15 +16,35 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Variables
     FirebaseUser user;
     TextView txt;
+    AlertDialog.Builder dialogoCerrar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Vista
         txt = (TextView) findViewById(R.id.txtPrincipal);
+
+        //Creamos dialogo cerrar sesión
+        dialogoCerrar = new AlertDialog.Builder(this);
+        dialogoCerrar.setIcon(getDrawable(R.drawable.alert_icon))
+                .setTitle("Cerrar sesión")
+                .setMessage("¿Seguro que quieres cerrar sesión?")
+                .setPositiveButton("Cerrar sesión", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        FirebaseAuth.getInstance().signOut();
+                        recargar();
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(MainActivity.this, "Cancelado", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         recargar();
     }
@@ -62,8 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, Perfil.class));
                 break;
             case R.id.mnCerrar:
-                FirebaseAuth.getInstance().signOut();
-                recargar();
+                dialogoCerrar.show();
                 break;
             case R.id.mnEstadisticas:
                 startActivity(new Intent(this, Estadisticas.class));
