@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            Toast.makeText(this, "Usuario detectado! " + user.getEmail(), Toast.LENGTH_SHORT).show();
             txt.setText("Hola " + user.getDisplayName());
         } else {
             //si no esta Logueado, llevale a que inicie sesión
@@ -60,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.mnPerfil:
+                startActivity(new Intent(this, Perfil.class));
                 break;
             case R.id.mnCerrar:
                 FirebaseAuth.getInstance().signOut();

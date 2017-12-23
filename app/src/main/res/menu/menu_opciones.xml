@@ -9,11 +9,14 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/mnEstadisticas"
+        android:icon="@drawable/estadisticas_icon"
+        android:title="Estadisticas"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/mnCerrar"
         android:icon="@drawable/exit_icon"
         android:title="Cerrar Sesión"
         app:showAsAction="always" />
-
-    <item android:id="@+id/mnEstadisticas"
-        android:title="Estadisticas" />
 </menu>
