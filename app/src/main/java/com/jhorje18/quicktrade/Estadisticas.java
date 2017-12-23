@@ -1,11 +1,7 @@
 package com.jhorje18.quicktrade;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -18,7 +14,7 @@ import com.jhorje18.quicktrade.model.Usuario;
 
 import java.util.ArrayList;
 
-public class MostrarUsers extends AppCompatActivity {
+public class Estadisticas extends AppCompatActivity {
 
     //Variables
     ListView vistaLista;
@@ -29,7 +25,7 @@ public class MostrarUsers extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mostrar_users);
+        setContentView(R.layout.activity_estadisticas);
 
         //Vista
         vistaLista = (ListView) findViewById(R.id.listaMostrarUsuarios);
@@ -55,7 +51,7 @@ public class MostrarUsers extends AppCompatActivity {
                     listado.add(userUsuario);
                 }
 
-                adaptador = new ArrayAdapter<String>(MostrarUsers.this,android.R.layout.simple_list_item_1,listado);
+                adaptador = new ArrayAdapter<String>(Estadisticas.this,android.R.layout.simple_list_item_1,listado);
                 vistaLista.setAdapter(adaptador);
             }
 
@@ -64,27 +60,5 @@ public class MostrarUsers extends AppCompatActivity {
 
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_opciones, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.mnNuevoUser:
-                Intent nuevo = new Intent(this,NuevoUser.class);
-                startActivity(nuevo);
-                break;
-            case R.id.mnMostrarUser:
-                recreate();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

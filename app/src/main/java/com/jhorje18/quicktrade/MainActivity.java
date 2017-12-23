@@ -11,12 +11,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.jhorje18.quicktrade.model.Usuario;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,8 +40,9 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Usuario detectado! " + user.getEmail(), Toast.LENGTH_SHORT).show();
             txt.setText("Hola " + user.getDisplayName());
         } else {
-            Toast.makeText(this, "Ningun usuario", Toast.LENGTH_SHORT).show();
-            txt.setText("Nadie detectado!");
+            //si no esta Logueado, llevale a que inicie sesión
+            startActivity(new Intent(this, Login.class));
+            finish();
         }
     }
 
@@ -64,24 +59,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.mnNuevoUser:
-                Intent nueva = new Intent(this, NuevoUser.class);
-                startActivity(nueva);
-                overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                break;
-            case R.id.mnMostrarUser:
-                Intent mostrar = new Intent(this, MostrarUsers.class);
-                startActivity(mostrar);
-                overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                break;
-            case R.id.mnLogin:
-                Intent login = new Intent(this, Login.class);
-                startActivity(login);
-                finish();
+            case R.id.mnPerfil:
                 break;
             case R.id.mnCerrar:
                 FirebaseAuth.getInstance().signOut();
                 recargar();
+                break;
+            case R.id.mnEstadisticas:
+                startActivity(new Intent(this, Estadisticas.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
