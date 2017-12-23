@@ -209,7 +209,7 @@ public class Registro extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(Registro.this, "Error al registrar. \n" + task.getException(),
-                                    Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 });

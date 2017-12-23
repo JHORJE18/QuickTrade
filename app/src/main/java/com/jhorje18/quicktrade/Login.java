@@ -15,11 +15,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Login extends AppCompatActivity {
 
     //Variables
     EditText editCorreo, editPass;
-    Button btnRegistro, btnLogin;
+    Button btnRegistro, btnLogin, btnRecup;
 
     private FirebaseAuth mAuth;
 
@@ -33,6 +36,7 @@ public class Login extends AppCompatActivity {
         editPass = (EditText) findViewById(R.id.editLoginContraseña);
         btnRegistro = (Button) findViewById(R.id.btnLoginRegistrarse);
         btnLogin = (Button) findViewById(R.id.btnLoginLogin);
+        btnRecup = (Button) findViewById(R.id.btnLoginRecup);
 
         //Cerramos sesion si hay alguna abierta!
         FirebaseAuth.getInstance().signOut();
@@ -50,6 +54,36 @@ public class Login extends AppCompatActivity {
                 login(editCorreo.getText().toString(), editPass.getText().toString());
             }
         });
+
+        btnRecup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Comprueba correo válido!
+                if (correoValido(editCorreo.getText().toString())){
+                    recuperarContraseña(editCorreo.getText().toString());
+                }
+            }
+        });
+    }
+
+    private boolean correoValido(String correo) {
+        if (correo.isEmpty()){
+            //Vacio!
+            editCorreo.setError("No puedes dejar este campo en blanco.");
+            return false;
+        }
+
+        //Valida estructura String
+        Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+        Matcher matcher = pattern.matcher(editCorreo.getText().toString());
+
+        if (!matcher.matches()){
+            //No valido!
+            editCorreo.setError("Dirección de correo no valido.");
+            return false;
+        }
+
+        return true;
     }
 
     private void ventanaRegistro() {
@@ -58,35 +92,13 @@ public class Login extends AppCompatActivity {
         finish();
     }
 
-    //TODO Trasladar registro a la nueva activity
-    private void registrar(final String email, String password) {
-
-        mAuth = FirebaseAuth.getInstance();
-
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(Login.this, "Autentificado " + user.getUid(), Toast.LENGTH_SHORT).show();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(Login.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
     private void inicio() {
         Intent inicio = new Intent(this,MainActivity.class);
         startActivity(inicio);
         finish();
     }
 
-    //TODO Mejorar login y guardar en las preferencias el UID
+    //TODO Mejorar login
     private void login(final String email, String password) {
 
         mAuth = FirebaseAuth.getInstance();
@@ -104,7 +116,23 @@ public class Login extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(Login.this, "Authentication failed." + task.getException(),
-                                    Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    private void recuperarContraseña(final String email){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        auth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(Login.this, "Contraseña enviada a " + email, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(Login.this, "Error: " + task.getException(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
