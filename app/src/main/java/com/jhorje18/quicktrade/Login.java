@@ -77,6 +77,12 @@ public class Login extends AppCompatActivity {
                 });
     }
 
+    private void inicio() {
+        Intent inicio = new Intent(this,MainActivity.class);
+        startActivity(inicio);
+        finish();
+    }
+
     //TODO Mejorar login y guardar en las preferencias el UID
     private void login(final String email, String password) {
 
@@ -89,7 +95,9 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(Login.this, "Autentificado " + user.getUid() + " <> " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "Autentificado " + user.getUid(), Toast.LENGTH_SHORT).show();
+
+                            inicio();
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(Login.this, "Authentication failed." + task.getException(),
