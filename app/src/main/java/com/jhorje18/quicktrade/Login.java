@@ -34,6 +34,9 @@ public class Login extends AppCompatActivity {
         btnRegistro = (Button) findViewById(R.id.btnLoginRegistrarse);
         btnLogin = (Button) findViewById(R.id.btnLoginLogin);
 
+        //Cerramos sesion si hay alguna abierta!
+        FirebaseAuth.getInstance().signOut();
+
         btnRegistro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             Toast.makeText(this, "Usuario detectado! " + user.getEmail(), Toast.LENGTH_SHORT).show();
-            txt.setText("Hola " + user.getEmail());
+            txt.setText("Hola " + user.getDisplayName());
         } else {
             Toast.makeText(this, "Ningun usuario", Toast.LENGTH_SHORT).show();
             txt.setText("Nadie detectado!");

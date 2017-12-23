@@ -1,13 +1,31 @@
 package com.jhorje18.quicktrade;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.jhorje18.quicktrade.model.Usuario;
+
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +33,10 @@ public class Registro extends AppCompatActivity {
 
     //Variables
     EditText editUsuario, editCorreo, editContraseña, editNombre, editApedillos, editDireccion;
+    ArrayList<String> listaUsuarios;
+
+    private FirebaseAuth mAuth;
+    DatabaseReference bbdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +50,32 @@ public class Registro extends AppCompatActivity {
         editNombre = (EditText) findViewById(R.id.editRegNombre);
         editApedillos = (EditText) findViewById(R.id.editRegApedillos);
         editDireccion = (EditText) findViewById(R.id.editRegDireccion);
+
+        //Iniciamos ArrayList
+        listaUsuarios = new ArrayList<String>();
+
+        //Obtener BBDD FireBase
+        bbdd = FirebaseDatabase.getInstance().getReference("usuarios");
+
+        //Añadir evento al detectar nuevo valor en BBDD
+        bbdd.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //Obtenemos nombres de usuario
+                for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
+                    Usuario usuarioTEMP = datasnapshot.getValue(Usuario.class);
+
+                    String userUsuario = usuarioTEMP.getUsuario();
+                    listaUsuarios.add(userUsuario);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     //Validar campos
@@ -37,6 +85,10 @@ public class Registro extends AppCompatActivity {
         //Validar Usuario
         if (editUsuario.getText().toString().isEmpty()){
             editUsuario.setError("No puedes dejar este campo en blanco.");
+            valido = false;
+        } else if (!usuarioUnico(editUsuario.getText().toString())){
+            //Nombre de usuario en uso!
+            editUsuario.setError("El usuario " + editUsuario.getText().toString() + " ya esta registrado.");
             valido = false;
         }
 
@@ -84,11 +136,94 @@ public class Registro extends AppCompatActivity {
         return valido;
     }
 
+    private boolean usuarioUnico(String nuevoUser) {
+        //Evalua usuario UNICO
+        for (int i=0;i<listaUsuarios.size();i++){
+            if (nuevoUser.equals(listaUsuarios.get(i))){
+                //Coincide con otro usuario!
+                return false;
+            }
+        }
+
+        //Usuario unico
+        return true;
+    }
+
+    //Proceder a registro
+    private void registrarBBDD(){
+        //Obtener valores
+        String usuario = editUsuario.getText().toString();
+        String correo = editCorreo.getText().toString();
+        String nombre = editNombre.getText().toString();
+        String apedillos = editApedillos.getText().toString();
+        String direccion = editDireccion.getText().toString();
+
+        //Creamos objeto usuario con sus valores
+        Usuario nuevo = new Usuario(usuario,nombre,apedillos,correo,direccion);
+
+        //Creamos clave del "Registro"
+        String clave = nuevo.getUsuario();
+
+        //Enviamos el objeto a la BBDD de FireBase
+        bbdd.child(clave).setValue(nuevo);
+
+        Toast.makeText(getApplicationContext(), "Usuario " + nuevo.getUsuario() + " registrado", Toast.LENGTH_LONG).show();
+
+        //Añadimos info perfil
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(editUsuario.getText().toString())
+                .build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            //Se ha cambiado el nombre de pantalla
+                        }
+                    }
+                });
+
+        //Iniciamos actividad Login
+        Intent login = new Intent(this, Login.class);
+        startActivity(login);
+        finish();
+    }
+
+    private void registroUser(String email, String password){
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            Toast.makeText(Registro.this, "Autentificado " + user.getUid(), Toast.LENGTH_SHORT).show();
+
+                            //Procedemos a crear BBDD
+                            registrarBBDD();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(Registro.this, "Error al registrar. \n" + task.getException(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
     //Eventos botones
     public void onClick(View v){
         switch (v.getId()){
             case R.id.btnRegCrear:
-                boolean ok = validarCampos();
+                //Valida primero los campos
+                if (validarCampos()){
+                    //Entonces vamos a intentar registrarlo!
+                    registroUser(editCorreo.getText().toString(), editContraseña.getText().toString());
+                }
                 break;
             case R.id.btnRegIniciar:
                 Intent nueva = new Intent(this, Login.class);
