@@ -73,7 +73,7 @@ public class Confirmar extends AppCompatActivity {
 
     private void pantallaEliminar() {
         txtAccion.setText("Para eliminar tu cuenta.");
-        txtConsecuencias.setText("Aviso! \nSe van a borrar todos tus datos asociados a la dirección wiijlg@hotmail.com. No podras recuperar la información.");
+        txtConsecuencias.setText("Aviso! \nSe van a borrar todos tus datos asociados a su dirección de correo electrónico. No podras recuperar la información.");
 
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
