@@ -24,7 +24,7 @@ public class Estadisticas extends AppCompatActivity {
 
     //Variables
     ListView vistaListaUsers, vistaListaProducts;
-    ArrayList<String> listaUsuarios, listaProductos, clavesProductos;
+    ArrayList<String> listaUsuarios, listaProductos, clavesUsuarios, clavesProductos;
     TextView txtUsuarios, txtProductos;
 
     DatabaseReference bbddUser;
@@ -45,6 +45,7 @@ public class Estadisticas extends AppCompatActivity {
         listaUsuarios = new ArrayList<String>();
         listaProductos = new ArrayList<String>();
         clavesProductos = new ArrayList<String>();
+        clavesUsuarios = new ArrayList<String>();
 
         //Obtener BBDD FireBase
         bbddUser = FirebaseDatabase.getInstance().getReference("usuarios");
@@ -56,12 +57,16 @@ public class Estadisticas extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 ArrayAdapter<String> adaptador;
+                listaUsuarios.clear();
+                clavesUsuarios.clear();
 
                 //Obtenemos nombres de usuario
                 for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
                     Usuario usuarioTEMP = datasnapshot.getValue(Usuario.class);
                     String userUsuario = usuarioTEMP.getUsuario();
+
                     listaUsuarios.add(userUsuario);
+                    clavesUsuarios.add(datasnapshot.getKey());
                 }
 
                 adaptador = new ArrayAdapter<String>(Estadisticas.this, android.R.layout.simple_list_item_1, listaUsuarios);
@@ -82,6 +87,8 @@ public class Estadisticas extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 ArrayAdapter<String> adaptador;
+                listaProductos.clear();
+                clavesProductos.clear();
 
                 //Obtenemos nombres de productos
                 for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
@@ -105,6 +112,15 @@ public class Estadisticas extends AppCompatActivity {
         });
 
         //Evento clicks listas
+        vistaListaUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Iniciamos Mostrar producto con su clave
+                Intent mostrar = new Intent(Estadisticas.this,Perfil.class);
+                mostrar.putExtra("clave",clavesUsuarios.get(position));
+                startActivity(mostrar);
+            }
+        });
         vistaListaProducts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

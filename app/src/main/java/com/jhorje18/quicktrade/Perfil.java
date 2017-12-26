@@ -16,17 +16,27 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.jhorje18.quicktrade.model.Producto;
+import com.jhorje18.quicktrade.model.Usuario;
 
 public class Perfil extends AppCompatActivity {
 
     //Variables
     TextView txtUsuario;
 
-    FirebaseUser user;
-    AlertDialog.Builder dialogoEliminar;
+    Usuario actualUsuario;
+    String claveUsuario;
 
-    //TODO Si obtiene Intent con perfil a mostrar cargar info del perfil
-    //TODO Mostrar datos del propio perfil!
+    DatabaseReference refUsuario;
+    FirebaseUser user;
+    DatabaseReference bbddUser;
+    AlertDialog.Builder dialogoEliminar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +46,34 @@ public class Perfil extends AppCompatActivity {
         //Vista
         txtUsuario = (TextView) findViewById(R.id.txtPerfilUsuario);
 
+        //Obtenemos clave del nodo a mostrar
+        claveUsuario = getIntent().getStringExtra("clave");
+
+        //Obtener BBDD FireBase
+        bbddUser = FirebaseDatabase.getInstance().getReference("usuarios");
+
+        //Obtener usuario actual
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        //Si no recibe usuario a mostrar...
+        if (claveUsuario != null) {
+            refUsuario = FirebaseDatabase.getInstance().getReference("usuarios/" + claveUsuario);
+            refUsuario.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    actualUsuario = dataSnapshot.getValue(Usuario.class);
+                    recargar();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
+        } else {
+            txtUsuario.setText(user.getDisplayName());
+        }
+
         //Creamos dialogo eliminar cuenta
         dialogoEliminar = new AlertDialog.Builder(this);
         dialogoEliminar.setIcon(getDrawable(R.drawable.alert_icon))
@@ -43,27 +81,26 @@ public class Perfil extends AppCompatActivity {
                 .setMessage("¿Seguro que quieres eliminar tu cuenta?")
                 .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        eliminarCuenta();
-                        Intent confirmaEliminar = new Intent(Perfil.this,Confirmar.class);
-                        confirmaEliminar.putExtra("eliminar",true);
+                        Intent confirmaEliminar = new Intent(Perfil.this, Confirmar.class);
+                        confirmaEliminar.putExtra("eliminar", true);
                         startActivity(confirmaEliminar);
                     }
                 })
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(Perfil.this, "Cancelado", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        public void onClick(DialogInterface dialog, int id) {Toast.makeText(Perfil.this, "Cancelado", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-        //Obtenemos info user actual
+         //Obtenemos info user actual
         user = FirebaseAuth.getInstance().getCurrentUser();
-
-        //Recargamos vista
-        recargar();
     }
 
     private void recargar() {
-        txtUsuario.setText(user.getDisplayName());
+        if (actualUsuario != null){
+            txtUsuario.setText(actualUsuario.getUsuario());
+        } else {
+            txtUsuario.setText(user.getDisplayName());
+        }
     }
 
     //Menu opciones superior
@@ -88,9 +125,5 @@ public class Perfil extends AppCompatActivity {
                 startActivity(new Intent(this,ProductoView.class));
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void eliminarCuenta(){
-
     }
 }
