@@ -25,10 +25,21 @@
             android:label="Editar usuario"
             android:parentActivityName=".NuevoUser" />
         <activity
-            android:name=".MostrarUsers"
-            android:label="Lista usuarios registrados"
+            android:name=".Estadisticas"
+            android:label="Estadísticas"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".Login"></activity>
+        <activity
+            android:name=".Login"
+            android:label="Iniciar sesión" />
+        <activity
+            android:name=".Registro"
+            android:label="Crear cuenta" />
+        <activity
+            android:name=".Perfil"
+            android:label="Perfil"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".Confirmar"/>
     </application>
 
 </manifest>

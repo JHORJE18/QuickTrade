@@ -2,17 +2,21 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/mnLogin"
-        android:title="Registrar" />
     <item
-        android:id="@+id/mnMostrarUser"
-        android:icon="@drawable/people_icon"
-        android:title="Mostrar usuarios"
+        android:id="@+id/mnPerfil"
+        android:icon="@drawable/account_icon"
+        android:title="Mi perfil"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/mnNuevoUser"
-        android:icon="@drawable/add_user"
-        android:title="Registrar usuario"
+        android:id="@+id/mnEstadisticas"
+        android:icon="@drawable/estadisticas_icon"
+        android:title="Estadisticas"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/mnCerrar"
+        android:icon="@drawable/exit_icon"
+        android:title="Cerrar Sesión"
         app:showAsAction="always" />
 </menu>

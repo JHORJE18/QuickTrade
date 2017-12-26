@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jhorje18.quicktrade.Login">
+    tools:context="com.jhorje18.quicktrade.Confirmar">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,10 +19,17 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Iniciar Sesión"
+                android:text="Inicia Sesión"
                 android:textAlignment="center"
                 android:textSize="30sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtConfirmAccion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Para confirmar eliminar la cuenta"
+                android:textAlignment="textStart" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -38,7 +44,7 @@
                 android:layout_height="match_parent">
 
                 <EditText
-                    android:id="@+id/editLoginCorreo"
+                    android:id="@+id/editConfirmCorreo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -51,7 +57,7 @@
                 android:layout_height="match_parent">
 
                 <EditText
-                    android:id="@+id/editLoginContraseña"
+                    android:id="@+id/editConfirmContraseña"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -59,37 +65,20 @@
                     android:inputType="textPassword" />
             </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Has olvidado tu contraseña?" />
-
-                <Button
-                    android:id="@+id/btnLoginRecup"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Recuperar contraseña"
-                    android:textColor="@android:color/holo_red_light"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
             <Button
-                android:id="@+id/btnLoginLogin"
+                android:id="@+id/btnConfirmConfirmar"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="100dp"
                 android:layout_marginRight="100dp"
-                android:text="Iniciar Sesión" />
+                android:text="Confirmar" />
+
+            <TextView
+                android:id="@+id/txtConfirmConsecuencias"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Aviso! se van a eliminar todos tus datos y no podras recuperarlos" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -100,12 +89,13 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/btnLoginRegistrarse"
+                android:id="@+id/btnConfirmCancelar"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Registrarse" />
+                android:text="Cancelar"
+                android:textColor="@android:color/holo_red_dark" />
 
         </LinearLayout>
     </ScrollView>

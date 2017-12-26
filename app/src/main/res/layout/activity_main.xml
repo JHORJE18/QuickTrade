@@ -6,4 +6,14 @@
     android:layout_height="match_parent"
     tools:context="com.jhorje18.quicktrade.MainActivity">
 
+    <TextView
+        android:id="@+id/txtPrincipal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_weight="1"
+        android:text="Sin elementos!"
+        android:textAlignment="textStart"
+        android:textSize="25sp"
+        android:textStyle="bold" />
 </LinearLayout>
