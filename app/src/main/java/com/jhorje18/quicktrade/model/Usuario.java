@@ -22,7 +22,7 @@ public class Usuario {
     }
 
     public Usuario(){
-
+        //Constructor obligatorio FireBase
     }
 
     public String getUsuario() {
