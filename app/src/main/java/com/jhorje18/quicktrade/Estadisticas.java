@@ -1,9 +1,14 @@
 package com.jhorje18.quicktrade;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,7 +24,8 @@ public class Estadisticas extends AppCompatActivity {
 
     //Variables
     ListView vistaListaUsers, vistaListaProducts;
-    ArrayList<String> listaUsuarios, listaProductos;
+    ArrayList<String> listaUsuarios, listaProductos, clavesProductos;
+    TextView txtUsuarios, txtProductos;
 
     DatabaseReference bbddUser;
     DatabaseReference bbddProduct;
@@ -32,10 +38,13 @@ public class Estadisticas extends AppCompatActivity {
         //Vista
         vistaListaUsers = (ListView) findViewById(R.id.listaMostrarUsuarios);
         vistaListaProducts = (ListView) findViewById(R.id.listaMostrarProductos);
+        txtUsuarios = (TextView) findViewById(R.id.txtEstUsers);
+        txtProductos = (TextView) findViewById(R.id.txtEsProductos);
 
         //Iniciamos ArrayList
         listaUsuarios = new ArrayList<String>();
         listaProductos = new ArrayList<String>();
+        clavesProductos = new ArrayList<String>();
 
         //Obtener BBDD FireBase
         bbddUser = FirebaseDatabase.getInstance().getReference("usuarios");
@@ -47,18 +56,18 @@ public class Estadisticas extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 ArrayAdapter<String> adaptador;
-                ArrayList<String> listado = new ArrayList<String>();
 
                 //Obtenemos nombres de usuario
                 for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
                     Usuario usuarioTEMP = datasnapshot.getValue(Usuario.class);
                     String userUsuario = usuarioTEMP.getUsuario();
                     listaUsuarios.add(userUsuario);
-                    listado.add(userUsuario);
                 }
 
-                adaptador = new ArrayAdapter<String>(Estadisticas.this, android.R.layout.simple_list_item_1, listado);
+                adaptador = new ArrayAdapter<String>(Estadisticas.this, android.R.layout.simple_list_item_1, listaUsuarios);
                 vistaListaUsers.setAdapter(adaptador);
+
+                txtUsuarios.setText(listaUsuarios.size() + "x Usuarios:");
             }
 
             @Override
@@ -73,7 +82,6 @@ public class Estadisticas extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 ArrayAdapter<String> adaptador;
-                ArrayList<String> listado = new ArrayList<String>();
 
                 //Obtenemos nombres de productos
                 for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
@@ -81,16 +89,29 @@ public class Estadisticas extends AppCompatActivity {
                     String nameProducto = productoTEMP.getNombre();
 
                     listaProductos.add(nameProducto);
-                    listado.add(nameProducto);
+                    clavesProductos.add(datasnapshot.getKey());
                 }
 
-                adaptador = new ArrayAdapter<String>(Estadisticas.this, android.R.layout.simple_list_item_1, listado);
+                adaptador = new ArrayAdapter<String>(Estadisticas.this, android.R.layout.simple_list_item_1, listaProductos);
                 vistaListaProducts.setAdapter(adaptador);
+
+                txtProductos.setText(listaProductos.size() + "x Productos:");
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+
+        //Evento clicks listas
+        vistaListaProducts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Iniciamos Mostrar producto con su clave
+                Intent mostrar = new Intent(Estadisticas.this,ProductoView.class);
+                mostrar.putExtra("clave",clavesProductos.get(position));
+                startActivity(mostrar);
             }
         });
     }

@@ -25,6 +25,9 @@ public class Perfil extends AppCompatActivity {
     FirebaseUser user;
     AlertDialog.Builder dialogoEliminar;
 
+    //TODO Si obtiene Intent con perfil a mostrar cargar info del perfil
+    //TODO Mostrar datos del propio perfil!
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +84,8 @@ public class Perfil extends AppCompatActivity {
             case R.id.mnEliminar:
                 dialogoEliminar.show();
                 break;
+            case R.id.mnNuevoProducto:
+                startActivity(new Intent(this,ProductoView.class));
         }
         return super.onOptionsItemSelected(item);
     }

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jhorje18.quicktrade">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/carrito"
@@ -38,8 +40,8 @@
             android:name=".Perfil"
             android:label="Perfil"
             android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".Confirmar"/>
+        <activity android:name=".Confirmar" />
+        <activity android:name=".ProductoView"></activity>
     </application>
 
 </manifest>
