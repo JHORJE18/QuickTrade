@@ -20,7 +20,7 @@
                 android:id="@+id/txtPerfilUsuario"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="JHORJE18"
+                android:text="USUARIO"
                 android:textAlignment="center"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -35,13 +35,19 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/txtPerfilSinProductos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Sin articulos"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <ListView
+                android:id="@+id/listPerfilArticulos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
+
     </ScrollView>
 </LinearLayout>
