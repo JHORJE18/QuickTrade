@@ -79,8 +79,8 @@ public class Perfil extends AppCompatActivity {
                     actualUsuario = dataSnapshot.getValue(Usuario.class);
 
                     //Forzamos a recargar el usuario
-                    cargarListadoProductos();
                     recargar();
+                    cargarListadoProductos();
                 }
 
                 @Override
@@ -90,10 +90,9 @@ public class Perfil extends AppCompatActivity {
             });
         } else {
             recargar();
+            //Cargamos listado productos
+            cargarListadoProductos();
         }
-
-        //Cargamos listado productos
-        cargarListadoProductos();
 
         //Creamos dialogo eliminar cuenta
         dialogoEliminar = new AlertDialog.Builder(this);
