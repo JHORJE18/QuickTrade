@@ -27,26 +27,17 @@
             android:id="@+id/txtNuevoLista"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:text="Usuario:"
             android:textSize="21sp" />
 
-        <Spinner
-            android:id="@+id/listaEditar"
+        <TextView
+            android:id="@+id/txtEditUsuario"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2" />
-
-        <ImageButton
-            android:id="@+id/btnEditReload"
-            style="@style/Widget.AppCompat.ImageButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:backgroundTint="@android:color/black"
-            android:contentDescription="Cargar usuario"
-            android:onClick="onClick"
-            app:srcCompat="@drawable/download_icon" />
+            android:layout_weight="1"
+            android:text="USUARIO"
+            android:textSize="21sp" />
 
     </LinearLayout>
 

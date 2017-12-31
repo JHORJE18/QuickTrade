@@ -103,6 +103,8 @@ public class Confirmar extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
+                            //TODO Eliminar productos del usuario
+
                             //Procedemos a eliminar
                             Query q = bbdd.orderByChild("correo").equalTo((String) editCorreo.getText().toString());
 

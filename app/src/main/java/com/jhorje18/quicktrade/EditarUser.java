@@ -9,8 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,12 +27,11 @@ import java.util.ArrayList;
 public class EditarUser extends AppCompatActivity {
 
     //Variables
-    Spinner spin_users;
-    ArrayList<String> listaUsuarios;
-    ArrayList<Usuario> infoUsuarios;
-    ImageButton imgReload;
+    Usuario usuarioEdit;
+    TextView txtUsuario;
     EditText editCorreo, editNombre, editApedillos, editDireccion;
 
+    FirebaseUser user;
     DatabaseReference bbdd;
 
     @Override
@@ -38,42 +40,29 @@ public class EditarUser extends AppCompatActivity {
         setContentView(R.layout.activity_editar_user);
 
         //Vista
-        spin_users = (Spinner) findViewById(R.id.listaEditar);
-        imgReload = (ImageButton) findViewById(R.id.btnEditReload);
+        txtUsuario = (TextView) findViewById(R.id.txtEditUsuario);
         editCorreo = (EditText) findViewById(R.id.editEditCorreo);
         editNombre = (EditText) findViewById(R.id.editEditNombre);
         editApedillos = (EditText) findViewById(R.id.editEditApedillos);
         editDireccion = (EditText) findViewById(R.id.editEditDireccion);
 
-        //Iniciamos ArrayLists
-        listaUsuarios = new ArrayList<String>();
-        infoUsuarios = new ArrayList<Usuario>();
+        //Obtener usuario actual
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         //Obtener BBDD FireBase
         bbdd = FirebaseDatabase.getInstance().getReference("usuarios");
 
-        //Añadir evento al detectar nuevo valor en BBDD
-        bbdd.addValueEventListener(new ValueEventListener() {
+        //Buscar al usuario de la sesión actual
+        Query q = bbdd.orderByChild("usuario").equalTo((String) user.getDisplayName());
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                ArrayAdapter<String> adaptador;
-
-                //Obtenemos nombres de usuario
-                for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
-                    //Obtenemos el usuario
-                    Usuario usuarioTEMP = datasnapshot.getValue(Usuario.class);
-
-                    //Guardamos nombre de usuario
-                    String userUsuario = usuarioTEMP.getUsuario();
-                    listaUsuarios.add(userUsuario);
-
-                    //Guardamos info del usuario
-                    infoUsuarios.add(usuarioTEMP);
+                for (DataSnapshot datasnapshot: dataSnapshot.getChildren()){
+                    usuarioEdit = datasnapshot.getValue(Usuario.class);
                 }
 
-                adaptador = new ArrayAdapter<String>(EditarUser.this,android.R.layout.simple_list_item_1,listaUsuarios);
-                spin_users.setAdapter(adaptador);
+                //Cargamos datos usuario actual
+                cargarUsuario(usuarioEdit);
             }
 
             @Override
@@ -89,7 +78,7 @@ public class EditarUser extends AppCompatActivity {
             case R.id.btnEditEditar:
                 if (validarCampos()){
                     //Procedemos para editar
-                    Query q = bbdd.orderByChild("usuario").equalTo((String) spin_users.getSelectedItem());
+                    Query q = bbdd.orderByChild("usuario").equalTo((String) txtUsuario.getText().toString());
 
                     //Si ha encontrado algun registro unico
                     q.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -100,6 +89,7 @@ public class EditarUser extends AppCompatActivity {
                                 String clave = dataSnapshot1.getKey();
 
                                 //Editamos todos los campos
+                                //TODO Modificar datos no funciona
                                 bbdd.child(clave).child("correo").setValue(editCorreo.getText().toString());
                                 bbdd.child(clave).child("nombre").setValue(editNombre.getText().toString());
                                 bbdd.child(clave).child("apedillos").setValue(editApedillos.getText().toString());
@@ -117,39 +107,12 @@ public class EditarUser extends AppCompatActivity {
                     });
                 }
                 break;
-            case R.id.btnEditEliminar:
-                //Procedemos a eliminar
-                Query q = bbdd.orderByChild("usuario").equalTo((String) spin_users.getSelectedItem());
-
-                //Si ha encontrado algun registro unico
-                q.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                            String clave = dataSnapshot1.getKey();
-                            DatabaseReference ref = bbdd.child(clave);
-
-                            ref.removeValue();
-                            Toast.makeText(EditarUser.this, "Usuario " + spin_users.getSelectedItem() + " eliminado!", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-                break;
-            case R.id.btnEditReload:
-                cargarUsuario(infoUsuarios.get(spin_users.getSelectedItemPosition()));
-                break;
         }
     }
 
     //Cargar datos del usuario
     private void cargarUsuario(Usuario user){
+        txtUsuario.setText("@" + user.getUsuario());
         editCorreo.setText(user.getCorreo());
         editNombre.setText(user.getNombre());
         editApedillos.setText(user.getApedillos());

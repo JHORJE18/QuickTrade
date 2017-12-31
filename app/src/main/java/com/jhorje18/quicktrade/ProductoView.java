@@ -28,7 +28,7 @@ public class ProductoView extends AppCompatActivity {
     //Variables
     TextView txtNombre, txtUser, txtDescripcion, txtCategoria, txtPrecio;
 
-    Producto actualProducto = null;
+    Producto actualProducto;
     DatabaseReference refProducto;
 
     @Override
