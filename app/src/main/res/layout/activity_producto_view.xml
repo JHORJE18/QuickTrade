@@ -20,7 +20,7 @@
                 android:id="@+id/txtProductNombre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="MacBook Pro"
+                android:text="Nombre"
                 android:textSize="40sp"
                 android:textStyle="bold" />
 
@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/colorAccent"
                     android:padding="5dp"
-                    android:text="#TECNOLOGIA"
+                    android:text="#CATEGORIA"
                     android:textColor="@color/common_google_signin_btn_text_dark_default"
                     android:textSize="21sp" />
 
@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:background="?android:attr/actionModeBackground"
                     android:padding="5dp"
-                    android:text="\@JHORJE18"
+                    android:text="@USUARIO"
                     android:textAlignment="center"
                     android:textColor="@color/common_google_signin_btn_text_dark_focused"
                     android:textSize="21sp" />
@@ -73,7 +73,7 @@
                 android:id="@+id/txtProductPrecio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="155,50€"
+                android:text="PRECIO€"
                 android:textAlignment="textEnd"
                 android:textColor="@color/colorPrimary"
                 android:textSize="55sp"

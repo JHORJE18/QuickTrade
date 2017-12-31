@@ -28,7 +28,7 @@ public class ProductoView extends AppCompatActivity {
     //Variables
     TextView txtNombre, txtUser, txtDescripcion, txtCategoria, txtPrecio;
 
-    Producto actualProducto;
+    Producto actualProducto = null;
     DatabaseReference refProducto;
 
     @Override
@@ -70,10 +70,10 @@ public class ProductoView extends AppCompatActivity {
 
     //Mostrar datos en pantalla
     private void recargarVista() {
-        txtNombre.setText(actualProducto.getNombre());
-        txtUser.setText("@" + actualProducto.getUsuario());
-        txtPrecio.setText(actualProducto.getPrecio());
-        txtCategoria.setText("#" + actualProducto.getCategoria());
-        txtDescripcion.setText(actualProducto.getDescripcion());
+            txtNombre.setText(actualProducto.getNombre());
+            txtUser.setText("@" + actualProducto.getUsuario());
+            txtPrecio.setText(actualProducto.getPrecio());
+            txtCategoria.setText("#" + actualProducto.getCategoria());
+            txtDescripcion.setText(actualProducto.getDescripcion());
     }
 }

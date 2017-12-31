@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,7 +39,7 @@ public class Perfil extends AppCompatActivity {
 
     Usuario actualUsuario;
     String claveUsuario;
-    ArrayList<String> listaProductos;
+    ArrayList<String> listaProductos, claveProductos;
 
     DatabaseReference refUsuario;
     FirebaseUser user;
@@ -67,6 +68,7 @@ public class Perfil extends AppCompatActivity {
 
         //Iniciamos ArrayList
         listaProductos = new ArrayList<String>();
+        claveProductos = new ArrayList<String>();
 
         //Si no recibe usuario a mostrar...
         if (claveUsuario != null) {
@@ -75,6 +77,9 @@ public class Perfil extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     actualUsuario = dataSnapshot.getValue(Usuario.class);
+
+                    //Forzamos a recargar el usuario
+                    cargarListadoProductos();
                     recargar();
                 }
 
@@ -86,6 +91,9 @@ public class Perfil extends AppCompatActivity {
         } else {
             recargar();
         }
+
+        //Cargamos listado productos
+        cargarListadoProductos();
 
         //Creamos dialogo eliminar cuenta
         dialogoEliminar = new AlertDialog.Builder(this);
@@ -103,9 +111,6 @@ public class Perfil extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {Toast.makeText(Perfil.this, "Cancelado", Toast.LENGTH_SHORT).show();
                         }
                     });
-
-         //Obtenemos info user actual
-        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     private void recargar() {
@@ -114,8 +119,6 @@ public class Perfil extends AppCompatActivity {
         } else {
             txtUsuario.setText(user.getDisplayName());
         }
-
-        cargarListadoProductos();
 
         //Si no hay productos no muestres el List
         if (listaProductos.size() > 0){
@@ -138,6 +141,8 @@ public class Perfil extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Creamos lista de los productos
                 ArrayAdapter<String> adaptador;
+                listaProductos.clear();
+                claveProductos.clear();
 
                 //Obtenemos nombres de productos
                 for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
@@ -145,17 +150,29 @@ public class Perfil extends AppCompatActivity {
                     String nameProducto = productoTEMP.getNombre();
 
                     listaProductos.add(nameProducto);
-                    Toast.makeText(Perfil.this, "Obtenido " + nameProducto, Toast.LENGTH_SHORT).show();
+                    claveProductos.add(datasnapshot.getKey());
                 }
 
                 //Asignamos listView a array productos
                 adaptador = new ArrayAdapter<String>(Perfil.this, android.R.layout.simple_list_item_1, listaProductos);
                 listViewProductos.setAdapter(adaptador);
+
+                recargar();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+
+        listViewProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                //Iniciamos mostrar producto con su clave
+                Intent mostrar = new Intent(Perfil.this,ProductoView.class);
+                mostrar.putExtra("clave",claveProductos.get(position));
+                startActivity(mostrar);
             }
         });
     }
