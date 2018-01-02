@@ -3,14 +3,19 @@ package com.jhorje18.quicktrade;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,13 +29,14 @@ import java.util.ArrayList;
 public class EditarUser extends AppCompatActivity {
 
     //Variables
-    Spinner spin_users;
-    ArrayList<String> listaUsuarios;
-    ArrayList<Usuario> infoUsuarios;
-    ImageButton imgReload;
+    ProgressBar progressBar;
+    TextView txtUsuario;
     EditText editCorreo, editNombre, editApedillos, editDireccion;
 
-    DatabaseReference bbdd;
+    Usuario usuarioEdit;
+    String claveUsuario;
+    FirebaseUser user;
+    DatabaseReference bbddUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,42 +44,32 @@ public class EditarUser extends AppCompatActivity {
         setContentView(R.layout.activity_editar_user);
 
         //Vista
-        spin_users = (Spinner) findViewById(R.id.listaEditar);
-        imgReload = (ImageButton) findViewById(R.id.btnEditReload);
+        txtUsuario = (TextView) findViewById(R.id.txtEditUsuario);
         editCorreo = (EditText) findViewById(R.id.editEditCorreo);
         editNombre = (EditText) findViewById(R.id.editEditNombre);
         editApedillos = (EditText) findViewById(R.id.editEditApedillos);
         editDireccion = (EditText) findViewById(R.id.editEditDireccion);
+        progressBar = (ProgressBar) findViewById(R.id.progressEditLoad);
 
-        //Iniciamos ArrayLists
-        listaUsuarios = new ArrayList<String>();
-        infoUsuarios = new ArrayList<Usuario>();
+        //Obtener usuario actual
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         //Obtener BBDD FireBase
-        bbdd = FirebaseDatabase.getInstance().getReference("usuarios");
+        bbddUser = FirebaseDatabase.getInstance().getReference("usuarios");
 
-        //Añadir evento al detectar nuevo valor en BBDD
-        bbdd.addValueEventListener(new ValueEventListener() {
+        //Buscar al usuario de la sesión actual
+        Query q = bbddUser.orderByChild("usuario").equalTo((String) user.getDisplayName());
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                ArrayAdapter<String> adaptador;
-
-                //Obtenemos nombres de usuario
-                for(DataSnapshot datasnapshot: dataSnapshot.getChildren()){
-                    //Obtenemos el usuario
-                    Usuario usuarioTEMP = datasnapshot.getValue(Usuario.class);
-
-                    //Guardamos nombre de usuario
-                    String userUsuario = usuarioTEMP.getUsuario();
-                    listaUsuarios.add(userUsuario);
-
-                    //Guardamos info del usuario
-                    infoUsuarios.add(usuarioTEMP);
+                for (DataSnapshot datasnapshot: dataSnapshot.getChildren()){
+                    usuarioEdit = datasnapshot.getValue(Usuario.class);
+                    claveUsuario = datasnapshot.getKey();
+                    progressBar.setVisibility(View.GONE);
                 }
 
-                adaptador = new ArrayAdapter<String>(EditarUser.this,android.R.layout.simple_list_item_1,listaUsuarios);
-                spin_users.setAdapter(adaptador);
+                //Cargamos datos usuario actual
+                cargarUsuario(usuarioEdit);
             }
 
             @Override
@@ -88,68 +84,48 @@ public class EditarUser extends AppCompatActivity {
         switch (v.getId()){
             case R.id.btnEditEditar:
                 if (validarCampos()){
-                    //Procedemos para editar
-                    Query q = bbdd.orderByChild("usuario").equalTo((String) spin_users.getSelectedItem());
+                    Log.i("#FUNCION","Procediendo a editar campos");
+                    //Comprobamos que datos han sido cambiados
 
-                    //Si ha encontrado algun registro unico
-                    q.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
+                    //Nombre
+                    if (!editNombre.getText().toString().equals(usuarioEdit.getNombre())){
+                        Log.i("#FUNCION","El nombre es diferente");
+                        cambiarValor("nombre",editNombre.getText().toString());
+                        Toast.makeText(this, "Nombre cambiado a " + editNombre.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
 
-                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                                String clave = dataSnapshot1.getKey();
+                    //Apedillos
+                    if (!editApedillos.getText().toString().equals(usuarioEdit.getApedillos())){
+                        Log.i("#FUNCION","Los apedillos son diferentes");
+                        cambiarValor("apedillos",editApedillos.getText().toString());
+                        Toast.makeText(this, "Apedillos cambiados a " + editApedillos.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
 
-                                //Editamos todos los campos
-                                bbdd.child(clave).child("correo").setValue(editCorreo.getText().toString());
-                                bbdd.child(clave).child("nombre").setValue(editNombre.getText().toString());
-                                bbdd.child(clave).child("apedillos").setValue(editApedillos.getText().toString());
-                                bbdd.child(clave).child("direccion").setValue(editDireccion.getText().toString());
+                    //Dirección
+                    if (!editDireccion.getText().toString().equals(usuarioEdit.getDireccion())){
+                        Log.i("#FUNCION","La dirección es diferente");
+                        cambiarValor("direccion",editDireccion.getText().toString());
+                        Toast.makeText(this, "Dirección cambiada a " + editDireccion.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
 
-                                Toast.makeText(EditarUser.this, "Valores editados correctamente", Toast.LENGTH_SHORT).show();
-                            }
+                    //Correo electrónico
+                    if (!editCorreo.getText().toString().equals(usuarioEdit.getCorreo())){
+                        Log.i("#FUNCION","El correo es diferente");
 
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+                    }
                 }
-                break;
-            case R.id.btnEditEliminar:
-                //Procedemos a eliminar
-                Query q = bbdd.orderByChild("usuario").equalTo((String) spin_users.getSelectedItem());
-
-                //Si ha encontrado algun registro unico
-                q.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                            String clave = dataSnapshot1.getKey();
-                            DatabaseReference ref = bbdd.child(clave);
-
-                            ref.removeValue();
-                            Toast.makeText(EditarUser.this, "Usuario " + spin_users.getSelectedItem() + " eliminado!", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-                break;
-            case R.id.btnEditReload:
-                cargarUsuario(infoUsuarios.get(spin_users.getSelectedItemPosition()));
                 break;
         }
     }
 
+    private void cambiarValor(String campo, String valor) {
+        //Procedemos a cambiar el valor
+        bbddUser.child(claveUsuario).child(campo).setValue(valor);
+    }
+
     //Cargar datos del usuario
     private void cargarUsuario(Usuario user){
+        txtUsuario.setText("@" + user.getUsuario());
         editCorreo.setText(user.getCorreo());
         editNombre.setText(user.getNombre());
         editApedillos.setText(user.getApedillos());

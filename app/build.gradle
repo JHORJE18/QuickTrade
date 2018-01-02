@@ -7,8 +7,8 @@ android {
         applicationId "com.jhorje18.quicktrade"
         minSdkVersion 22
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "2.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -31,9 +31,5 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:10.0.1'
     testCompile 'junit:junit:4.12'
 }
-
-
-
-
 
 apply plugin: 'com.google.gms.google-services'

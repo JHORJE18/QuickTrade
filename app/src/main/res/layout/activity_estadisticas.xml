@@ -9,6 +9,13 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.jhorje18.quicktrade.Estadisticas">
 
+    <ProgressBar
+        android:id="@+id/progressEstadisticasLoad"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true" />
+
     <TextView
         android:id="@+id/txtEstUsers"
         android:layout_width="match_parent"
@@ -20,9 +27,23 @@
     <ListView
         android:id="@+id/listaMostrarUsuarios"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_weight="1" />
+        android:layout_centerVertical="true"/>
+
+    <TextView
+        android:id="@+id/txtEsProductos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Productos:"
+        android:textSize="21sp"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/listaMostrarProductos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
 
 </LinearLayout>
