@@ -196,6 +196,7 @@ public class Perfil extends AppCompatActivity {
                 dialogoEliminar.show();
                 break;
             case R.id.mnNuevoProducto:
+                startActivity(new Intent(this,NuevoProducto.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
