@@ -1,5 +1,7 @@
 package com.jhorje18.quicktrade;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +16,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -111,7 +115,12 @@ public class EditarUser extends AppCompatActivity {
                     //Correo electrónico
                     if (!editCorreo.getText().toString().equals(usuarioEdit.getCorreo())){
                         Log.i("#FUNCION","El correo es diferente");
-
+                        //Actividad de confirmación
+                        Intent confirmar = new Intent(EditarUser.this,Confirmar.class);
+                        confirmar.putExtra("cambiarMail",true);
+                        confirmar.putExtra("claveUsuario",claveUsuario);
+                        confirmar.putExtra("nuevoCorreo",editCorreo.getText().toString());
+                        startActivity(confirmar);
                     }
                 }
                 break;
