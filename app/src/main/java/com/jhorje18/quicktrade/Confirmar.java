@@ -35,7 +35,7 @@ public class Confirmar extends AppCompatActivity {
 
     FirebaseUser user;
     private FirebaseAuth mAuth;
-    DatabaseReference bbddUser;
+    DatabaseReference bbddUser, bbddProductos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +79,7 @@ public class Confirmar extends AppCompatActivity {
 
         //Obtener BBDD FireBase
         bbddUser = FirebaseDatabase.getInstance().getReference("usuarios");
+        bbddProductos = FirebaseDatabase.getInstance().getReference("productos");
 
         //Obtenemos info user actual
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -141,8 +142,6 @@ public class Confirmar extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            //TODO Eliminar productos del usuario
-
                             //Procedemos a eliminar
                             Query q = bbddUser.orderByChild("correo").equalTo((String) editCorreo.getText().toString());
 
@@ -159,6 +158,32 @@ public class Confirmar extends AppCompatActivity {
                                         Toast.makeText(Confirmar.this, "Usuario " + user.getDisplayName() + " elimiando.", Toast.LENGTH_LONG).show();
                                     }
 
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                            //Eliminamos sus productos
+                            //TODO Eliminar productos
+                            Query qProducts = bbddProductos.orderByChild("usuario").equalTo(user.getDisplayName());
+                            qProducts.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    //Recorremos todos los productos
+                                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                        //Eliminamos este producto
+                                        String clave = dataSnapshot1.getKey();
+                                        DatabaseReference ref = bbddProductos.child(clave);
+
+                                        ref.removeValue();
+                                        Log.i("#FUNCTION","Producto con clave " + clave + " eliminado");
+                                    }
+
+                                    Toast.makeText(Confirmar.this, "Productos eliminados", Toast.LENGTH_SHORT).show();
                                 }
 
                                 @Override
