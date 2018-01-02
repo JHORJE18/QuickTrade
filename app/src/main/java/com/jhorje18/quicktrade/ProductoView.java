@@ -6,7 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ public class ProductoView extends AppCompatActivity {
 
     //Variables
     TextView txtNombre, txtUser, txtDescripcion, txtCategoria, txtPrecio;
+    ProgressBar progressBar;
 
     Producto actualProducto;
     DatabaseReference refProducto;
@@ -45,6 +48,7 @@ public class ProductoView extends AppCompatActivity {
         txtDescripcion = (TextView) findViewById(R.id.txtProductDescrpcion);
         txtCategoria = (TextView) findViewById(R.id.txtProductCategoria);
         txtPrecio = (TextView) findViewById(R.id.txtProductPrecio);
+        progressBar = (ProgressBar) findViewById(R.id.progressProductoLoad);
 
         //Si no ha recibido nada sacalo de esta pantalla
         if (claveProducto.isEmpty()){
@@ -58,6 +62,7 @@ public class ProductoView extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 actualProducto = dataSnapshot.getValue(Producto.class);
+                progressBar.setVisibility(View.GONE);
                 recargarVista();
             }
 

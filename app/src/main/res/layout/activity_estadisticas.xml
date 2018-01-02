@@ -9,6 +9,13 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.jhorje18.quicktrade.Estadisticas">
 
+    <ProgressBar
+        android:id="@+id/progressEstadisticasLoad"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true" />
+
     <TextView
         android:id="@+id/txtEstUsers"
         android:layout_width="match_parent"

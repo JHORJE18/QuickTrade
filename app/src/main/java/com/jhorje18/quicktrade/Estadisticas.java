@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ public class Estadisticas extends AppCompatActivity {
     ListView vistaListaUsers, vistaListaProducts;
     ArrayList<String> listaUsuarios, listaProductos, clavesUsuarios, clavesProductos;
     TextView txtUsuarios, txtProductos;
+    ProgressBar progressBar;
 
     DatabaseReference bbddUser;
     DatabaseReference bbddProduct;
@@ -40,6 +42,7 @@ public class Estadisticas extends AppCompatActivity {
         vistaListaProducts = (ListView) findViewById(R.id.listaMostrarProductos);
         txtUsuarios = (TextView) findViewById(R.id.txtEstUsers);
         txtProductos = (TextView) findViewById(R.id.txtEsProductos);
+        progressBar = (ProgressBar) findViewById(R.id.progressEstadisticasLoad);
 
         //Iniciamos ArrayList
         listaUsuarios = new ArrayList<String>();
@@ -67,6 +70,7 @@ public class Estadisticas extends AppCompatActivity {
 
                     listaUsuarios.add(userUsuario);
                     clavesUsuarios.add(datasnapshot.getKey());
+                    progressBar.setVisibility(View.GONE);
                 }
 
                 adaptador = new ArrayAdapter<String>(Estadisticas.this, android.R.layout.simple_list_item_1, listaUsuarios);
@@ -97,6 +101,7 @@ public class Estadisticas extends AppCompatActivity {
 
                     listaProductos.add(nameProducto);
                     clavesProductos.add(datasnapshot.getKey());
+                    progressBar.setVisibility(View.GONE);
                 }
 
                 adaptador = new ArrayAdapter<String>(Estadisticas.this, android.R.layout.simple_list_item_1, listaProductos);

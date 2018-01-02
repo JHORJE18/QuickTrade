@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,10 +29,11 @@ import java.util.ArrayList;
 public class EditarUser extends AppCompatActivity {
 
     //Variables
-    Usuario usuarioEdit;
+    ProgressBar progressBar;
     TextView txtUsuario;
     EditText editCorreo, editNombre, editApedillos, editDireccion;
 
+    Usuario usuarioEdit;
     String claveUsuario;
     FirebaseUser user;
     DatabaseReference bbddUser;
@@ -47,6 +49,7 @@ public class EditarUser extends AppCompatActivity {
         editNombre = (EditText) findViewById(R.id.editEditNombre);
         editApedillos = (EditText) findViewById(R.id.editEditApedillos);
         editDireccion = (EditText) findViewById(R.id.editEditDireccion);
+        progressBar = (ProgressBar) findViewById(R.id.progressEditLoad);
 
         //Obtener usuario actual
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -62,6 +65,7 @@ public class EditarUser extends AppCompatActivity {
                 for (DataSnapshot datasnapshot: dataSnapshot.getChildren()){
                     usuarioEdit = datasnapshot.getValue(Usuario.class);
                     claveUsuario = datasnapshot.getKey();
+                    progressBar.setVisibility(View.GONE);
                 }
 
                 //Cargamos datos usuario actual

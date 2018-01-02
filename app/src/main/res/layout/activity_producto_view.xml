@@ -16,6 +16,13 @@
             android:layout_margin="10dp"
             android:orientation="vertical">
 
+            <ProgressBar
+                android:id="@+id/progressProductoLoad"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true" />
+
             <TextView
                 android:id="@+id/txtProductNombre"
                 android:layout_width="match_parent"
