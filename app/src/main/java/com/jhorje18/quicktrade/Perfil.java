@@ -190,7 +190,7 @@ public class Perfil extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.mnEdit:
-                //startActivity(new Intent(this, EditarUser.class));
+                startActivity(new Intent(this, EditarUser.class));
                 break;
             case R.id.mnEliminar:
                 dialogoEliminar.show();

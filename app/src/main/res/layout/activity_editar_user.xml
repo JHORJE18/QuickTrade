@@ -87,13 +87,4 @@
         android:onClick="onClick"
         android:text="Editar campos" />
 
-    <Button
-        android:id="@+id/btnEditEliminar"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:onClick="onClick"
-        android:text="Eliminar usuario" />
-
 </LinearLayout>

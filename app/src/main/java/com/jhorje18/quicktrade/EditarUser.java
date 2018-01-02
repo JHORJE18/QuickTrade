@@ -3,6 +3,7 @@ package com.jhorje18.quicktrade;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,8 +32,9 @@ public class EditarUser extends AppCompatActivity {
     TextView txtUsuario;
     EditText editCorreo, editNombre, editApedillos, editDireccion;
 
+    String claveUsuario;
     FirebaseUser user;
-    DatabaseReference bbdd;
+    DatabaseReference bbddUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,15 +52,16 @@ public class EditarUser extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         //Obtener BBDD FireBase
-        bbdd = FirebaseDatabase.getInstance().getReference("usuarios");
+        bbddUser = FirebaseDatabase.getInstance().getReference("usuarios");
 
         //Buscar al usuario de la sesión actual
-        Query q = bbdd.orderByChild("usuario").equalTo((String) user.getDisplayName());
+        Query q = bbddUser.orderByChild("usuario").equalTo((String) user.getDisplayName());
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot datasnapshot: dataSnapshot.getChildren()){
                     usuarioEdit = datasnapshot.getValue(Usuario.class);
+                    claveUsuario = datasnapshot.getKey();
                 }
 
                 //Cargamos datos usuario actual
@@ -77,37 +80,43 @@ public class EditarUser extends AppCompatActivity {
         switch (v.getId()){
             case R.id.btnEditEditar:
                 if (validarCampos()){
-                    //Procedemos para editar
-                    Query q = bbdd.orderByChild("usuario").equalTo((String) txtUsuario.getText().toString());
+                    Log.i("#FUNCION","Procediendo a editar campos");
+                    //Comprobamos que datos han sido cambiados
 
-                    //Si ha encontrado algun registro unico
-                    q.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
+                    //Nombre
+                    if (!editNombre.getText().toString().equals(usuarioEdit.getNombre())){
+                        Log.i("#FUNCION","El nombre es diferente");
+                        cambiarValor("nombre",editNombre.getText().toString());
+                        Toast.makeText(this, "Nombre cambiado a " + editNombre.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
 
-                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                                String clave = dataSnapshot1.getKey();
+                    //Apedillos
+                    if (!editApedillos.getText().toString().equals(usuarioEdit.getApedillos())){
+                        Log.i("#FUNCION","Los apedillos son diferentes");
+                        cambiarValor("apedillos",editApedillos.getText().toString());
+                        Toast.makeText(this, "Apedillos cambiados a " + editApedillos.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
 
-                                //Editamos todos los campos
-                                //TODO Modificar datos no funciona
-                                bbdd.child(clave).child("correo").setValue(editCorreo.getText().toString());
-                                bbdd.child(clave).child("nombre").setValue(editNombre.getText().toString());
-                                bbdd.child(clave).child("apedillos").setValue(editApedillos.getText().toString());
-                                bbdd.child(clave).child("direccion").setValue(editDireccion.getText().toString());
+                    //Dirección
+                    if (!editDireccion.getText().toString().equals(usuarioEdit.getDireccion())){
+                        Log.i("#FUNCION","La dirección es diferente");
+                        cambiarValor("direccion",editDireccion.getText().toString());
+                        Toast.makeText(this, "Dirección cambiada a " + editDireccion.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
 
-                                Toast.makeText(EditarUser.this, "Valores editados correctamente", Toast.LENGTH_SHORT).show();
-                            }
+                    //Correo electrónico
+                    if (!editCorreo.getText().toString().equals(usuarioEdit.getCorreo())){
+                        Log.i("#FUNCION","El correo es diferente");
 
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+                    }
                 }
                 break;
         }
+    }
+
+    private void cambiarValor(String campo, String valor) {
+        //Procedemos a cambiar el valor
+        bbddUser.child(claveUsuario).child(campo).setValue(valor);
     }
 
     //Cargar datos del usuario
