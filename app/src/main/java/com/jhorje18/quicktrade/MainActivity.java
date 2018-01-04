@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -100,6 +101,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //TODO Pantalla para mostrar con filtro de categoria de productos
+
+        //Evento click en producto
+        vistaProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Iniciamos Mostrar producto con su clave
+                Intent mostrar = new Intent(MainActivity.this,ProductoView.class);
+                mostrar.putExtra("clave",clavesProductos.get(position));
+                startActivity(mostrar);
+            }
+        });
     }
 
     @Override
