@@ -98,7 +98,6 @@ public class Login extends AppCompatActivity {
         finish();
     }
 
-    //TODO Mejorar login
     private void login(final String email, String password) {
 
         mAuth = FirebaseAuth.getInstance();

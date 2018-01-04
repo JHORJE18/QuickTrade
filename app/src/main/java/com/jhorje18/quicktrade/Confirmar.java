@@ -27,14 +27,15 @@ import com.google.firebase.database.ValueEventListener;
 public class Confirmar extends AppCompatActivity {
 
     //Variables
-    boolean eliminar;
+    boolean eliminar, cambiarMail;
     EditText editCorreo, editPass;
     TextView txtAccion, txtConsecuencias;
     Button btnConfirmar, btnCancelar;
+    String claveUsuario, nuevoCorreo;
 
     FirebaseUser user;
     private FirebaseAuth mAuth;
-    DatabaseReference bbdd;
+    DatabaseReference bbddUser, bbddProductos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,9 @@ public class Confirmar extends AppCompatActivity {
 
         //Orden para eliminar cuenta
         eliminar = getIntent().getExtras().getBoolean("eliminar",false);
+
+        //Orden para cambiar correo
+        cambiarMail = getIntent().getExtras().getBoolean("cambiarMail",false);
 
         //Vista
         editCorreo = (EditText) findViewById(R.id.editConfirmCorreo);
@@ -57,6 +61,15 @@ public class Confirmar extends AppCompatActivity {
             pantallaEliminar();
         }
 
+        //Pantalla especifica Cambiar Correo
+        if (cambiarMail){
+            //Obtenemos clave usuario y nuevoCorreo
+            claveUsuario = getIntent().getExtras().getString("claveUsuario");
+            nuevoCorreo = getIntent().getExtras().getString("nuevoCorreo");
+
+            pantallaCambiarEmail();
+        }
+
         btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +78,8 @@ public class Confirmar extends AppCompatActivity {
         });
 
         //Obtener BBDD FireBase
-        bbdd = FirebaseDatabase.getInstance().getReference("usuarios");
+        bbddUser = FirebaseDatabase.getInstance().getReference("usuarios");
+        bbddProductos = FirebaseDatabase.getInstance().getReference("productos");
 
         //Obtenemos info user actual
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -96,6 +110,31 @@ public class Confirmar extends AppCompatActivity {
         });
     }
 
+    private void pantallaCambiarEmail(){
+        txtAccion.setText("Para cambiar el correo de tu cuenta.");
+        txtConsecuencias.setText("Aviso! \nSe va a cambiar tu dirección de email y deberas de Iniciar Sesión con tu nueva dirección de Correo Electrónico.");
+
+        btnConfirmar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (validarCampos()){
+                    AuthCredential credential = EmailAuthProvider
+                            .getCredential(editCorreo.getText().toString(), editPass.getText().toString());
+
+                    // Prompt the user to re-provide their sign-in credentials
+                    user.reauthenticate(credential)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Toast.makeText(Confirmar.this, "Sesión iniciada correctamente", Toast.LENGTH_SHORT).show();
+                                    cambiarCorreo();
+                                }
+                            });
+                }
+            }
+        });
+    }
+
     //Eliminamos al usuario del Sistema
     private void eliminarUsuario() {
         user.delete()
@@ -103,10 +142,8 @@ public class Confirmar extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            //TODO Eliminar productos del usuario
-
                             //Procedemos a eliminar
-                            Query q = bbdd.orderByChild("correo").equalTo((String) editCorreo.getText().toString());
+                            Query q = bbddUser.orderByChild("correo").equalTo((String) editCorreo.getText().toString());
 
                             //Si ha encontrado algun registro unico
                             q.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -115,7 +152,7 @@ public class Confirmar extends AppCompatActivity {
 
                                     for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                                         String clave = dataSnapshot1.getKey();
-                                        DatabaseReference ref = bbdd.child(clave);
+                                        DatabaseReference ref = bbddUser.child(clave);
 
                                         ref.removeValue();
                                         Toast.makeText(Confirmar.this, "Usuario " + user.getDisplayName() + " elimiando.", Toast.LENGTH_LONG).show();
@@ -129,11 +166,56 @@ public class Confirmar extends AppCompatActivity {
                                 }
                             });
 
+                            //Eliminamos sus productos
+                            Query qProducts = bbddProductos.orderByChild("usuario").equalTo(user.getDisplayName());
+                            qProducts.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    //Recorremos todos los productos
+                                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                        //Eliminamos este producto
+                                        String clave = dataSnapshot1.getKey();
+                                        DatabaseReference ref = bbddProductos.child(clave);
+
+                                        ref.removeValue();
+                                        Log.i("#FUNCTION","Producto con clave " + clave + " eliminado");
+                                    }
+
+                                    Toast.makeText(Confirmar.this, "Productos eliminados", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
                             Toast.makeText(Confirmar.this, "Usuario " + user.getDisplayName() + " elimiando.", Toast.LENGTH_LONG).show();
                             startActivity(new Intent(Confirmar.this, Login.class));
                             finish();
                         } else {
                             Toast.makeText(Confirmar.this, "Error al eliminar: " + task.getException(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    //Cambiamos correo al usuario del Sistema
+    private void cambiarCorreo(){
+        user.updateEmail(nuevoCorreo)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.i("#FUNCTION","Se ha cambiado el correo de acceso!");
+                            bbddUser.child(claveUsuario).child("correo").setValue(nuevoCorreo);
+
+                            Toast.makeText(Confirmar.this, "Correo cambiado a " + editCorreo.getText().toString(), Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(Confirmar.this, Login.class));
+                            finish();
+                        } else {
+                            Toast.makeText(Confirmar.this, "Se ha producido un error al intentar cambiar el correo: " + task.getException(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

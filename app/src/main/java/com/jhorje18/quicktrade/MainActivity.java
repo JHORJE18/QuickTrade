@@ -8,17 +8,34 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.jhorje18.quicktrade.model.AdaptadorProductos;
+import com.jhorje18.quicktrade.model.Producto;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     //Variables
-    FirebaseUser user;
     TextView txt;
+    ListView vistaProductos;
+    ArrayList<Producto> listaProductos;
+    ArrayList<String> clavesProductos;
+
+    FirebaseUser user;
+    DatabaseReference bbddProductos;
     AlertDialog.Builder dialogoCerrar;
 
     @Override
@@ -28,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Vista
         txt = (TextView) findViewById(R.id.txtPrincipal);
+        vistaProductos = (ListView) findViewById(R.id.listPrincipal);
 
         //Creamos dialogo cerrar sesión
         dialogoCerrar = new AlertDialog.Builder(this);
@@ -47,6 +65,54 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         recargar();
+
+        //Iniciamos ArrayList
+        listaProductos = new ArrayList<Producto>();
+        clavesProductos = new ArrayList<String>();
+
+        //Obtenemos BBDD Productos
+        bbddProductos = FirebaseDatabase.getInstance().getReference("productos");
+
+        //Cargar listado productos
+        bbddProductos.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                AdaptadorProductos adaptador;
+                listaProductos.clear();
+                clavesProductos.clear();
+
+                //Obtenemos nombres de productos
+                for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
+                    Producto productoTEMP = datasnapshot.getValue(Producto.class);
+
+                    listaProductos.add(productoTEMP);
+                    clavesProductos.add(datasnapshot.getKey());
+                }
+
+                //Adaptador personalizado
+                adaptador = new AdaptadorProductos(MainActivity.this, listaProductos);
+                vistaProductos.setAdapter(adaptador);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //TODO Pantalla para mostrar con filtro de categoria de productos
+
+        //Evento click en producto
+        vistaProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Iniciamos Mostrar producto con su clave
+                Intent mostrar = new Intent(MainActivity.this,ProductoView.class);
+                mostrar.putExtra("clave",clavesProductos.get(position));
+                startActivity(mostrar);
+            }
+        });
     }
 
     @Override

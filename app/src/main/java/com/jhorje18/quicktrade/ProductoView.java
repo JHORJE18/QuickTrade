@@ -71,6 +71,8 @@ public class ProductoView extends AppCompatActivity {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+
+        //TODO Permitir eliminar o modificar articulos
     }
 
     //Mostrar datos en pantalla

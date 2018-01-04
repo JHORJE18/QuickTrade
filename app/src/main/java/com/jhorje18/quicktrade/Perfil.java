@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.jhorje18.quicktrade.model.AdaptadorProductos;
 import com.jhorje18.quicktrade.model.Producto;
 import com.jhorje18.quicktrade.model.Usuario;
 
@@ -39,7 +40,8 @@ public class Perfil extends AppCompatActivity {
 
     Usuario actualUsuario;
     String claveUsuario;
-    ArrayList<String> listaProductos, claveProductos;
+    ArrayList<String> claveProductos;
+    ArrayList<Producto> listadoProductos;
 
     DatabaseReference refUsuario;
     FirebaseUser user;
@@ -67,8 +69,8 @@ public class Perfil extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         //Iniciamos ArrayList
-        listaProductos = new ArrayList<String>();
         claveProductos = new ArrayList<String>();
+        listadoProductos = new ArrayList<Producto>();
 
         //Si no recibe usuario a mostrar...
         if (claveUsuario != null) {
@@ -120,7 +122,7 @@ public class Perfil extends AppCompatActivity {
         }
 
         //Si no hay productos no muestres el List
-        if (listaProductos.size() > 0){
+        if (listadoProductos.size() > 0){
             listViewProductos.setVisibility(View.VISIBLE);
             txtSinProductos.setVisibility(View.GONE);
         } else {
@@ -139,21 +141,21 @@ public class Perfil extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Creamos lista de los productos
-                ArrayAdapter<String> adaptador;
-                listaProductos.clear();
+                AdaptadorProductos adaptador;
+
+                listadoProductos.clear();
                 claveProductos.clear();
 
                 //Obtenemos nombres de productos
                 for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
                     Producto productoTEMP = datasnapshot.getValue(Producto.class);
-                    String nameProducto = productoTEMP.getNombre();
 
-                    listaProductos.add(nameProducto);
+                    listadoProductos.add(productoTEMP);
                     claveProductos.add(datasnapshot.getKey());
                 }
 
-                //Asignamos listView a array productos
-                adaptador = new ArrayAdapter<String>(Perfil.this, android.R.layout.simple_list_item_1, listaProductos);
+                //Adaptador personalizado
+                adaptador = new AdaptadorProductos(Perfil.this, listadoProductos);
                 listViewProductos.setAdapter(adaptador);
 
                 recargar();
@@ -196,6 +198,7 @@ public class Perfil extends AppCompatActivity {
                 dialogoEliminar.show();
                 break;
             case R.id.mnNuevoProducto:
+                startActivity(new Intent(this,NuevoProducto.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
