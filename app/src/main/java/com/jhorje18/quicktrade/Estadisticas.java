@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jhorje18.quicktrade.model.AdaptadorProductos;
 import com.jhorje18.quicktrade.model.Producto;
 import com.jhorje18.quicktrade.model.Usuario;
 
@@ -25,7 +26,8 @@ public class Estadisticas extends AppCompatActivity {
 
     //Variables
     ListView vistaListaUsers, vistaListaProducts;
-    ArrayList<String> listaUsuarios, listaProductos, clavesUsuarios, clavesProductos;
+    ArrayList<String> listaUsuarios, clavesUsuarios, clavesProductos;
+    ArrayList<Producto> listaProductos;
     TextView txtUsuarios, txtProductos;
     ProgressBar progressBar;
 
@@ -46,7 +48,7 @@ public class Estadisticas extends AppCompatActivity {
 
         //Iniciamos ArrayList
         listaUsuarios = new ArrayList<String>();
-        listaProductos = new ArrayList<String>();
+        listaProductos = new ArrayList<Producto>();
         clavesProductos = new ArrayList<String>();
         clavesUsuarios = new ArrayList<String>();
 
@@ -90,21 +92,21 @@ public class Estadisticas extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                ArrayAdapter<String> adaptador;
+                AdaptadorProductos adaptador;
                 listaProductos.clear();
                 clavesProductos.clear();
 
                 //Obtenemos nombres de productos
                 for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
                     Producto productoTEMP = datasnapshot.getValue(Producto.class);
-                    String nameProducto = productoTEMP.getNombre();
 
-                    listaProductos.add(nameProducto);
+                    listaProductos.add(productoTEMP);
                     clavesProductos.add(datasnapshot.getKey());
                     progressBar.setVisibility(View.GONE);
                 }
 
-                adaptador = new ArrayAdapter<String>(Estadisticas.this, android.R.layout.simple_list_item_1, listaProductos);
+                //Adaptador personalizado
+                adaptador = new AdaptadorProductos(Estadisticas.this, listaProductos);
                 vistaListaProducts.setAdapter(adaptador);
 
                 txtProductos.setText(listaProductos.size() + "x Productos:");

@@ -167,7 +167,6 @@ public class Confirmar extends AppCompatActivity {
                             });
 
                             //Eliminamos sus productos
-                            //TODO Eliminar productos
                             Query qProducts = bbddProductos.orderByChild("usuario").equalTo(user.getDisplayName());
                             qProducts.addValueEventListener(new ValueEventListener() {
                                 @Override
