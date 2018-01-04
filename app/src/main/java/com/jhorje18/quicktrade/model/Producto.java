@@ -13,7 +13,7 @@ public class Producto {
     String categoria;
     String precio;
 
-    public Producto(String usuario, String nombre, String descripcion, String categoria, String precio, String imagen) {
+    public Producto(String usuario, String nombre, String descripcion, String categoria, String precio) {
         this.usuario = usuario;
         this.nombre = nombre;
         this.descripcion = descripcion;

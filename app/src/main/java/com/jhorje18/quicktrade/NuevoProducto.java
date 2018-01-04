@@ -6,7 +6,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,7 +27,7 @@ public class NuevoProducto extends AppCompatActivity {
     EditText editNombre, editDescripción, editPrecio;
 
     ArrayList<String> listaCategorias;
-    DatabaseReference bbddCategorias;
+    DatabaseReference bbddCategorias, bbddProductos;
     FirebaseUser user;
 
     @Override
@@ -44,6 +46,10 @@ public class NuevoProducto extends AppCompatActivity {
 
         //Obtenemos BBDD Firebase
         bbddCategorias = FirebaseDatabase.getInstance().getReference("categorias");
+        bbddProductos = FirebaseDatabase.getInstance().getReference("productos");
+
+        //Obten usuario sesión actual
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         //Listado categorias
         bbddCategorias.addValueEventListener(new ValueEventListener() {
@@ -78,10 +84,9 @@ public class NuevoProducto extends AppCompatActivity {
     public void onClick(View v){
         switch (v.getId()){
             case R.id.btnNuevoProductoGuardar:
-                //TODO Validar datos y proceder a guardar producto
+                //Valida datos y si estan correctos, procede a guardar producto
                 if (validarDatos()){
-                    //TODO Proceder a guardar producto
-
+                    guardarProducto();
                 }
                 break;
             case R.id.btnNuevoProductoCancelar:
@@ -91,7 +96,25 @@ public class NuevoProducto extends AppCompatActivity {
     }
 
     private void guardarProducto(){
+        //Preparamos valores
+        String usuario = user.getDisplayName();
+        String nombre = editNombre.getText().toString();
+        String descripcion = editDescripción.getText().toString();
+        String categoria = (String) spnCategorias.getSelectedItem();
+        String precio = editPrecio.getText().toString() + "€";
 
+        //Creamos producto local
+        Producto nuevoProducto = new Producto(usuario,nombre,descripcion,categoria,precio);
+
+        //Generamos clave para nuevo registro
+        String clave = bbddCategorias.push().getKey();
+
+        //Insertamos registro
+        bbddProductos.child(clave).setValue(nuevoProducto);
+
+        Toast.makeText(this, "Articulo " + nuevoProducto.getNombre() + " creado correctamente!", Toast.LENGTH_LONG).show();
+
+        finish();
     }
 
     private boolean validarDatos(){
