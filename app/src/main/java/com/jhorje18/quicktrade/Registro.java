@@ -84,17 +84,17 @@ public class Registro extends AppCompatActivity {
 
         //Validar Usuario
         if (editUsuario.getText().toString().isEmpty()){
-            editUsuario.setError("No puedes dejar este campo en blanco.");
+            editUsuario.setError(getString(R.string.error_input_value_empty));
             valido = false;
         } else if (!usuarioUnico(editUsuario.getText().toString())){
             //Nombre de usuario en uso!
-            editUsuario.setError("El usuario " + editUsuario.getText().toString() + " ya esta registrado.");
+            editUsuario.setError( getString(R.string.user) + " " + editUsuario.getText().toString() + " " + getString(R.string.error_user_existe));
             valido = false;
         }
 
         //Validar Correo
         if (editCorreo.getText().toString().isEmpty()){
-            editCorreo.setError("No puedes dejar este campo en blanco.");
+            editCorreo.setError(getString(R.string.error_input_email));
             valido = false;
         } else {
             //Valida estructura String
@@ -103,32 +103,32 @@ public class Registro extends AppCompatActivity {
 
             if (!matcher.matches()){
                 //No valido!
-                editCorreo.setError("Correo no valido.");
+                editCorreo.setError(getString(R.string.error_input_emailincorrect));
                 valido = false;
             }
         }
 
         //Validar Contraseña
         if (editContraseña.getText().toString().isEmpty()){
-            editContraseña.setError("No puedes dejar este campo en blanco.");
+            editContraseña.setError(getString(R.string.error_input_value_empty));
             valido = false;
         }
 
         //Validar Nombre
         if (editNombre.getText().toString().isEmpty()){
-            editNombre.setError("No puedes dejar este campo en blanco.");
+            editNombre.setError(getString(R.string.error_input_value_empty));
             valido = false;
         }
 
         //Validar Apedillos
         if (editApedillos.getText().toString().isEmpty()){
-            editApedillos.setError("No puedes dejar este campo en blanco.");
+            editApedillos.setError(getString(R.string.error_input_value_empty));
             valido = false;
         }
 
         //Validar Dirección
         if (editDireccion.getText().toString().isEmpty()){
-            editDireccion.setError("No puedes dejar este campo en blanco.");
+            editDireccion.setError(getString(R.string.error_input_value_empty));
             valido = false;
         }
 
@@ -167,7 +167,7 @@ public class Registro extends AppCompatActivity {
         //Enviamos el objeto a la BBDD de FireBase
         bbdd.child(clave).setValue(nuevo);
 
-        Toast.makeText(getApplicationContext(), "Usuario " + nuevo.getUsuario() + " registrado", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.user) + nuevo.getUsuario() + " registed", Toast.LENGTH_LONG).show();
 
         //Añadimos info perfil
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -202,13 +202,13 @@ public class Registro extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(Registro.this, "Autentificado " + user.getUid(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Registro.this, getString(R.string.login_correct) + user.getUid(), Toast.LENGTH_SHORT).show();
 
                             //Procedemos a crear BBDD
                             registrarBBDD();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(Registro.this, "Error al registrar. \n" + task.getException(),
+                            Toast.makeText(Registro.this, getString(R.string.error) + "\n" + task.getException(),
                                     Toast.LENGTH_LONG).show();
                         }
                     }

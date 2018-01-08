@@ -112,7 +112,7 @@ public class NuevoProducto extends AppCompatActivity {
         //Insertamos registro
         bbddProductos.child(clave).setValue(nuevoProducto);
 
-        Toast.makeText(this, "Articulo " + nuevoProducto.getNombre() + " creado correctamente!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.add_product) + " " + nuevoProducto.getNombre(), Toast.LENGTH_LONG).show();
 
         finish();
     }
@@ -122,19 +122,19 @@ public class NuevoProducto extends AppCompatActivity {
         boolean valido = true;
 
         if (editNombre.getText().toString().isEmpty()){
-            editNombre.setError("El nombre del producto es obligatorio");
+            editNombre.setError(getString(R.string.error_input_nameproduct));
             valido = false;
         }
 
         //Validar Descripción
         if (editDescripción.getText().toString().isEmpty()){
-            editDescripción.setError("Es obligatoria la descripción del producto");
+            editDescripción.setError(getString(R.string.error_input_descriptionproduct));
             valido = false;
         }
 
         //Validar precio
         if (editPrecio.getText().toString().isEmpty()){
-            editPrecio.setError("Has de especificar un precio del producto");
+            editPrecio.setError(getString(R.string.error_input_precioproduct));
             valido = false;
         }
 

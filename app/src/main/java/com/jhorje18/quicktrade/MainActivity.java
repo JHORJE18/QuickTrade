@@ -50,17 +50,17 @@ public class MainActivity extends AppCompatActivity {
         //Creamos dialogo cerrar sesión
         dialogoCerrar = new AlertDialog.Builder(this);
         dialogoCerrar.setIcon(getDrawable(R.drawable.alert_icon))
-                .setTitle("Cerrar sesión")
-                .setMessage("¿Seguro que quieres cerrar sesión?")
-                .setPositiveButton("Cerrar sesión", new DialogInterface.OnClickListener() {
+                .setTitle(getString(R.string.cerrar_sesion))
+                .setMessage(getString(R.string.question_logout))
+                .setPositiveButton(getString(R.string.cerrar_sesion), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         FirebaseAuth.getInstance().signOut();
                         recargar();
                     }
                 })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(MainActivity.this, "Cancelado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, getString(R.string.cancel), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            txt.setText("Hola " + user.getDisplayName());
+            txt.setText(getString(R.string.hola) + " " + user.getDisplayName());
         } else {
             //si no esta Logueado, llevale a que inicie sesión
             startActivity(new Intent(this, Login.class));

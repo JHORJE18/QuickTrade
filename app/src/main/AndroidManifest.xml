@@ -17,35 +17,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NuevoUser"
-            android:label="Añadir usuario"
-            android:parentActivityName=".MainActivity" />
-        <activity
             android:name=".EditarUser"
-            android:label="Editar usuario"
-            android:parentActivityName=".NuevoUser" />
+            android:label="@string/edit_profile"
+            android:parentActivityName=".Perfil" />
         <activity
             android:name=".Estadisticas"
-            android:label="Estadísticas"
+            android:label="@string/estadisticas"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".Login"
-            android:label="Iniciar sesión" />
+            android:label="@string/txtLogin" />
         <activity
             android:name=".Registro"
-            android:label="Crear cuenta" />
+            android:label="@string/txtRegistrarse" />
         <activity
             android:name=".Perfil"
-            android:label="Perfil"
+            android:label="@string/txtProfile"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".Confirmar"
-            android:label="Inicia Sesión para continuar..." />
+            android:label="@string/txtConfirm_for" />
         <activity
             android:name=".ProductoView"
-            android:label="Producto" />
+            android:label="@string/txtProducto" />
         <activity android:name=".NuevoProducto"
-            android:label="Nuevo Producto" />
+            android:label="@string/add_product" />
     </application>
 
 </manifest>

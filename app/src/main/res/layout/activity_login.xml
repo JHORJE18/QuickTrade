@@ -20,7 +20,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Iniciar Sesión"
+                android:text="@string/txtLogin"
                 android:textAlignment="center"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -42,7 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Correo:"
+                    android:hint="@string/txtCorreo"
                     android:inputType="textEmailAddress" />
             </android.support.design.widget.TextInputLayout>
 
@@ -55,7 +55,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Contraseña:"
+                    android:hint="@string/txtContraseña"
                     android:inputType="textPassword" />
             </android.support.design.widget.TextInputLayout>
 
@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Has olvidado tu contraseña?" />
+                    android:text="@string/txtPassOlvidado" />
 
                 <Button
                     android:id="@+id/btnLoginRecup"
@@ -77,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Recuperar contraseña"
+                    android:text="@string/txtRecuperarContraseña"
                     android:textColor="@android:color/holo_red_light"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="100dp"
                 android:layout_marginRight="100dp"
-                android:text="Iniciar Sesión" />
+                android:text="@string/txtLogin" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -105,7 +105,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Registrarse" />
+                android:text="@string/txtRegistrarse" />
 
         </LinearLayout>
     </ScrollView>

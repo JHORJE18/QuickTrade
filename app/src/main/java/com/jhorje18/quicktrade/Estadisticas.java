@@ -78,7 +78,7 @@ public class Estadisticas extends AppCompatActivity {
                 adaptador = new ArrayAdapter<String>(Estadisticas.this, android.R.layout.simple_list_item_1, listaUsuarios);
                 vistaListaUsers.setAdapter(adaptador);
 
-                txtUsuarios.setText(listaUsuarios.size() + "x Usuarios:");
+                txtUsuarios.setText(listaUsuarios.size() + getString(R.string.count_users));
             }
 
             @Override
@@ -109,7 +109,7 @@ public class Estadisticas extends AppCompatActivity {
                 adaptador = new AdaptadorProductos(Estadisticas.this, listaProductos);
                 vistaListaProducts.setAdapter(adaptador);
 
-                txtProductos.setText(listaProductos.size() + "x Productos:");
+                txtProductos.setText(listaProductos.size() + getString(R.string.count_products));
             }
 
             @Override
