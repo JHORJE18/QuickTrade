@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="Editar usuario"
+        android:text="@string/edit_profile"
         android:textAlignment="center"
         android:textSize="21sp"
         android:textStyle="bold" />
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Usuario:"
+            android:text="@string/user"
             android:textSize="21sp" />
 
         <TextView
@@ -48,37 +48,57 @@
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/editEditCorreo"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Correo:"
-        android:inputType="textEmailAddress" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/editEditNombre"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Nombre:"
-        android:inputType="textCapWords|textPersonName" />
+        <EditText
+            android:id="@+id/editEditCorreo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/txtCorreo"
+            android:inputType="textEmailAddress" />
+    </android.support.design.widget.TextInputLayout>
 
-    <EditText
-        android:id="@+id/editEditApedillos"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Apedillos:"
-        android:inputType="textCapWords|textPersonName" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/editEditDireccion"
+        <EditText
+            android:id="@+id/editEditNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/txtNombre"
+            android:inputType="textCapWords|textPersonName" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Dirección:"
-        android:inputType="textCapWords|textCapSentences|textAutoComplete|textPostalAddress" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/editEditApedillos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/txtApedillos"
+            android:inputType="textCapWords|textPersonName" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/editEditDireccion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/txtDireccion"
+            android:inputType="textCapWords|textCapSentences|textAutoComplete|textPostalAddress" />
+    </android.support.design.widget.TextInputLayout>
 
     <Space
         android:layout_width="match_parent"
@@ -92,6 +112,6 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/holo_blue_bright"
         android:onClick="onClick"
-        android:text="Editar campos" />
+        android:text="@string/txtConfirmar" />
 
 </LinearLayout>

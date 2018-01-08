@@ -19,7 +19,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nuevo producto"
+                android:text="@string/add_product"
                 android:textAlignment="center"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -40,7 +40,7 @@
                     android:id="@+id/editNuevoProductNombre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nombre producto:"
+                    android:hint="@string/txtNameProduct"
                     android:inputType="text|textCapWords|textAutoCorrect|textAutoComplete" />
             </android.support.design.widget.TextInputLayout>
 
@@ -53,7 +53,7 @@
                     android:id="@+id/editNuevoProductDescripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Descripción:"
+                    android:hint="@string/txtDescriptionProduct"
                     android:inputType="text|textCapWords|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textImeMultiLine"
                     android:singleLine="false" />
             </android.support.design.widget.TextInputLayout>
@@ -67,7 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Categoria:"
+                    android:text="@string/txtCategoria"
                     android:textSize="21sp" />
 
                 <Spinner
@@ -85,7 +85,7 @@
                     android:id="@+id/editNuevoProductPrecio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Precio:"
+                    android:hint="@string/txtPrecio"
                     android:inputType="number|numberSigned|numberDecimal" />
             </android.support.design.widget.TextInputLayout>
 
@@ -97,7 +97,7 @@
                 android:layout_marginLeft="100dp"
                 android:layout_marginRight="100dp"
                 android:onClick="onClick"
-                android:text="Subir producto" />
+                android:text="@string/txtSubirProducto" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -116,7 +116,7 @@
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
                 android:onClick="onClick"
-                android:text="Cancelar"
+                android:text="@string/txtCancelar"
                 android:textColor="@android:color/holo_red_dark" />
 
         </LinearLayout>

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "934409196498-42fq5uldr872pp9jmio41bgsfkg2o3rg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jhorje18.quicktrade",
+            "certificate_hash": "76a33f74e0177ea7c68da4b061dbddb0229fab59"
+          }
+        },
+        {
           "client_id": "934409196498-1u7uk0eudnm7lvp52m57slpkdc56lhoo.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

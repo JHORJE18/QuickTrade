@@ -5,18 +5,18 @@
     <item
         android:id="@+id/mnPerfil"
         android:icon="@drawable/account_icon"
-        android:title="Mi perfil"
+        android:title="@string/my_profile"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/mnEstadisticas"
         android:icon="@drawable/estadisticas_icon"
-        android:title="Estadisticas"
+        android:title="@string/estadisticas"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/mnCerrar"
         android:icon="@drawable/exit_icon"
-        android:title="Cerrar Sesión"
+        android:title="@string/cerrar_sesion"
         app:showAsAction="always" />
 </menu>

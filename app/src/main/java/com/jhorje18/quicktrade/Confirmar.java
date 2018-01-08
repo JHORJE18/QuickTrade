@@ -86,8 +86,8 @@ public class Confirmar extends AppCompatActivity {
     }
 
     private void pantallaEliminar() {
-        txtAccion.setText("Para eliminar tu cuenta.");
-        txtConsecuencias.setText("Aviso! \nSe van a borrar todos tus datos asociados a su dirección de correo electrónico. No podras recuperar la información.");
+        txtAccion.setText(getString(R.string.for_delete_account));
+        txtConsecuencias.setText(getString(R.string.consecuencia_eliminar_cuenta));
 
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +101,7 @@ public class Confirmar extends AppCompatActivity {
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    Toast.makeText(Confirmar.this, "Sesión iniciada correctamente", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Confirmar.this, getString(R.string.login_correct), Toast.LENGTH_SHORT).show();
                                     eliminarUsuario();
                                 }
                             });
@@ -111,8 +111,8 @@ public class Confirmar extends AppCompatActivity {
     }
 
     private void pantallaCambiarEmail(){
-        txtAccion.setText("Para cambiar el correo de tu cuenta.");
-        txtConsecuencias.setText("Aviso! \nSe va a cambiar tu dirección de email y deberas de Iniciar Sesión con tu nueva dirección de Correo Electrónico.");
+        txtAccion.setText(getString(R.string.for_change_email));
+        txtConsecuencias.setText(getString(R.string.consecuencia_cambiar_correo));
 
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +126,7 @@ public class Confirmar extends AppCompatActivity {
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    Toast.makeText(Confirmar.this, "Sesión iniciada correctamente", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Confirmar.this, getString(R.string.login_correct), Toast.LENGTH_SHORT).show();
                                     cambiarCorreo();
                                 }
                             });
@@ -155,7 +155,7 @@ public class Confirmar extends AppCompatActivity {
                                         DatabaseReference ref = bbddUser.child(clave);
 
                                         ref.removeValue();
-                                        Toast.makeText(Confirmar.this, "Usuario " + user.getDisplayName() + " elimiando.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(Confirmar.this, getString(R.string.user) + " " + user.getDisplayName() + " " + getString(R.string.deleted), Toast.LENGTH_LONG).show();
                                     }
 
                                 }
@@ -182,7 +182,7 @@ public class Confirmar extends AppCompatActivity {
                                         Log.i("#FUNCTION","Producto con clave " + clave + " eliminado");
                                     }
 
-                                    Toast.makeText(Confirmar.this, "Productos eliminados", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Confirmar.this, getString(R.string.deleted_products), Toast.LENGTH_SHORT).show();
                                 }
 
                                 @Override
@@ -191,11 +191,11 @@ public class Confirmar extends AppCompatActivity {
                                 }
                             });
 
-                            Toast.makeText(Confirmar.this, "Usuario " + user.getDisplayName() + " elimiando.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(Confirmar.this, getString(R.string.user) + " " + user.getDisplayName() + " " + getString(R.string.deleted), Toast.LENGTH_LONG).show();
                             startActivity(new Intent(Confirmar.this, Login.class));
                             finish();
                         } else {
-                            Toast.makeText(Confirmar.this, "Error al eliminar: " + task.getException(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(Confirmar.this, getString(R.string.error_delete) + " " + task.getException(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -211,11 +211,11 @@ public class Confirmar extends AppCompatActivity {
                             Log.i("#FUNCTION","Se ha cambiado el correo de acceso!");
                             bbddUser.child(claveUsuario).child("correo").setValue(nuevoCorreo);
 
-                            Toast.makeText(Confirmar.this, "Correo cambiado a " + editCorreo.getText().toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Confirmar.this,  getString(R.string.changed_email) + " " + editCorreo.getText().toString(), Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(Confirmar.this, Login.class));
                             finish();
                         } else {
-                            Toast.makeText(Confirmar.this, "Se ha producido un error al intentar cambiar el correo: " + task.getException(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Confirmar.this, getString(R.string.error_change_mail) + " " + task.getException(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -227,17 +227,17 @@ public class Confirmar extends AppCompatActivity {
 
         //Validar correo
         if (editCorreo.getText().toString().isEmpty()){
-            editCorreo.setError("Introduce tu dirección de correo electrónico.");
+            editCorreo.setError(getString(R.string.error_input_email));
             valido = false;
         }
 
         if (!editCorreo.getText().toString().equals(user.getEmail())){
-            editCorreo.setError("Email incorrecto!");
+            editCorreo.setError(getString(R.string.error_input_emailincorrect));
             valido = false;
         }
 
         if (editPass.getText().toString().isEmpty()){
-            editPass.setError("Introduce tu contraseña.");
+            editPass.setError(getString(R.string.error_input_password_empty));
             valido = false;
         }
 

@@ -1,21 +1,30 @@
 package com.jhorje18.quicktrade;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.jhorje18.quicktrade.model.Producto;
 
@@ -31,8 +40,10 @@ public class ProductoView extends AppCompatActivity {
     TextView txtNombre, txtUser, txtDescripcion, txtCategoria, txtPrecio;
     ProgressBar progressBar;
 
+    FirebaseUser user;
     Producto actualProducto;
     DatabaseReference refProducto;
+    AlertDialog.Builder dialogoEliminar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +62,13 @@ public class ProductoView extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressProductoLoad);
 
         //Si no ha recibido nada sacalo de esta pantalla
-        if (claveProducto.isEmpty()){
-            startActivity(new Intent(this,MainActivity.class));
+        if (claveProducto.isEmpty()) {
+            startActivity(new Intent(this, MainActivity.class));
             finish();
         }
+
+        //Obtener usuario actual
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         //Obtener producto!
         refProducto = FirebaseDatabase.getInstance().getReference("productos/" + claveProducto);
@@ -64,6 +78,7 @@ public class ProductoView extends AppCompatActivity {
                 actualProducto = dataSnapshot.getValue(Producto.class);
                 progressBar.setVisibility(View.GONE);
                 recargarVista();
+                invalidateOptionsMenu();
             }
 
             @Override
@@ -72,7 +87,57 @@ public class ProductoView extends AppCompatActivity {
             }
         });
 
-        //TODO Permitir eliminar o modificar articulos
+        //Creamos dialog eliminar producto
+        dialogoEliminar = new AlertDialog.Builder(this);
+        dialogoEliminar.setIcon(getDrawable(R.drawable.alert_icon))
+                .setTitle(getString(R.string.delete_product))
+                .setMessage(getString(R.string.question_delete_product))
+                .setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //TODO Eliminar producto actual
+                        refProducto.removeValue();
+                        Toast.makeText(ProductoView.this, getString(R.string.deleted_products), Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {Toast.makeText(ProductoView.this, getString(R.string.cancel), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        //Ocultar elementos si no es su producto
+        if (!user.getDisplayName().equals(actualProducto.getUsuario())){
+            menu.removeItem(R.id.mnEliminar);
+            menu.removeItem(R.id.mnEdit);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_perfil, menu);
+
+        menu.removeItem(R.id.mnNuevoProducto);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.mnEliminar:
+                dialogoEliminar.show();
+                break;
+            case R.id.mnEdit:
+                //TODO Editar producto
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     //Mostrar datos en pantalla

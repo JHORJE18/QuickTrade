@@ -82,6 +82,7 @@ public class Perfil extends AppCompatActivity {
 
                     //Forzamos a recargar el usuario
                     recargar();
+                    invalidateOptionsMenu();
                     cargarListadoProductos();
                 }
 
@@ -99,17 +100,17 @@ public class Perfil extends AppCompatActivity {
         //Creamos dialogo eliminar cuenta
         dialogoEliminar = new AlertDialog.Builder(this);
         dialogoEliminar.setIcon(getDrawable(R.drawable.alert_icon))
-                .setTitle("Eliminar perfil")
-                .setMessage("¿Seguro que quieres eliminar tu cuenta?")
-                .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                .setTitle(getString(R.string.delete_profile))
+                .setMessage(getString(R.string.question_delete))
+                .setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent confirmaEliminar = new Intent(Perfil.this, Confirmar.class);
                         confirmaEliminar.putExtra("eliminar", true);
                         startActivity(confirmaEliminar);
                     }
                 })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {Toast.makeText(Perfil.this, "Cancelado", Toast.LENGTH_SHORT).show();
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {Toast.makeText(Perfil.this, getString(R.string.cancel), Toast.LENGTH_SHORT).show();
                         }
                     });
     }
@@ -176,6 +177,17 @@ public class Perfil extends AppCompatActivity {
                 startActivity(mostrar);
             }
         });
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (actualUsuario != null) {
+            if (!actualUsuario.getUsuario().equals(user.getDisplayName())) {
+                menu.removeItem(R.id.mnEdit);
+                menu.removeItem(R.id.mnEliminar);
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     //Menu opciones superior

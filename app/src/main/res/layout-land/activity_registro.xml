@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Crear Cuenta"
+                android:text="@string/txtRegistrarse"
                 android:textAlignment="center"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -58,7 +58,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:hint="Correo:"
+                            android:hint="@string/txtCorreo"
                             android:inputType="textEmailAddress" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -72,7 +72,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:hint="Contraseña:"
+                            android:hint="@string/txtContraseña"
                             android:inputType="textPassword" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -86,7 +86,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:hint="Usuario:"
+                            android:hint="@string/user"
                             android:inputType="textCapCharacters" />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
@@ -108,7 +108,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:hint="Nombre:"
+                            android:hint="@string/txtNombre"
                             android:inputType="textCapWords|textPersonName" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -122,7 +122,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:hint="Apedillos:"
+                            android:hint="@string/txtApedillos"
                             android:inputType="textCapWords" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -136,7 +136,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:hint="Dirección:"
+                            android:hint="@string/txtDireccion"
                             android:inputType="textCapWords|textCapSentences|textAutoComplete|textPostalAddress" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -151,7 +151,7 @@
                 android:layout_marginLeft="100dp"
                 android:layout_marginRight="100dp"
                 android:onClick="onClick"
-                android:text="Crear cuenta" />
+                android:text="@string/txtRegistrarse" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -169,7 +169,7 @@
                 android:layout_marginLeft="100dp"
                 android:layout_marginRight="100dp"
                 android:onClick="onClick"
-                android:text="Iniciar Sesión" />
+                android:text="@string/txtLogin" />
 
         </LinearLayout>
     </ScrollView>

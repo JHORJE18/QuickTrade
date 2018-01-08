@@ -95,21 +95,21 @@ public class EditarUser extends AppCompatActivity {
                     if (!editNombre.getText().toString().equals(usuarioEdit.getNombre())){
                         Log.i("#FUNCION","El nombre es diferente");
                         cambiarValor("nombre",editNombre.getText().toString());
-                        Toast.makeText(this, "Nombre cambiado a " + editNombre.getText().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.edit_name_changed) + editNombre.getText().toString(), Toast.LENGTH_SHORT).show();
                     }
 
                     //Apedillos
                     if (!editApedillos.getText().toString().equals(usuarioEdit.getApedillos())){
                         Log.i("#FUNCION","Los apedillos son diferentes");
                         cambiarValor("apedillos",editApedillos.getText().toString());
-                        Toast.makeText(this, "Apedillos cambiados a " + editApedillos.getText().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.edit_surnames_changed) + editApedillos.getText().toString(), Toast.LENGTH_SHORT).show();
                     }
 
                     //Dirección
                     if (!editDireccion.getText().toString().equals(usuarioEdit.getDireccion())){
                         Log.i("#FUNCION","La dirección es diferente");
                         cambiarValor("direccion",editDireccion.getText().toString());
-                        Toast.makeText(this, "Dirección cambiada a " + editDireccion.getText().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.edit_direction_changed) + " " + editDireccion.getText().toString(), Toast.LENGTH_SHORT).show();
                     }
 
                     //Correo electrónico
@@ -147,7 +147,7 @@ public class EditarUser extends AppCompatActivity {
     private boolean validarCampos(){
         //Evalua campos no vacios
         if (editNombre.getText().toString().isEmpty() || editApedillos.getText().toString().isEmpty() || editCorreo.getText().toString().isEmpty() || editDireccion.getText().toString().isEmpty()){
-            Toast.makeText(getApplicationContext(),"No puede haber campos vacios!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),getString(R.string.error_input_values_empty),Toast.LENGTH_SHORT).show();
             return false;
         }
 

@@ -1,6 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">QuickTrade</string>
-    <string name="title_activity_users" translatable="false">ActivityUsers</string>
     <string name="hola">Hello</string>
     <string name="my_profile">My profile</string>
     <string name="estadisticas">Statistics</string>
@@ -15,7 +15,7 @@
     <string name="consecuencia_eliminar_cuenta">Notice! \\nAll your data associated with your email address will be deleted. You will not be able to retrieve the information.</string>
     <string name="login_correct">Session started correctly</string>
     <string name="for_change_email">For change your email directión.</string>
-    <string name="consecuencia_cambiar_correo">Notice! Your email address will be changed and you will have to log in with your new email address.</string>
+    <string name="consecuencia_cambiar_correo">Notice! \\nYour email address will be changed and you will have to log in with your new email address.</string>
     <string name="user">User</string>
     <string name="deleted">deleted</string>
     <string name="deleted_products">Products deleted</string>
@@ -36,8 +36,8 @@
     <string name="question_logout">Log out?</string>
     <string name="error_input_nameproduct">Enter the name of the product</string>
     <string name="error_input_descriptionproduct">Enter the description of the product</string>
-    <string name="error_input_precioproduct">Enter the price of product</string>
-    <string name="error_user_existe">are you already registered</string>
+    <string name="error_input_precioproduct">Enter the price of the product</string>
+    <string name="error_user_existe">Are you already registered</string>
     <string name="error_input_value_empty">This field can not be blank</string>
     <string name="txtLogin">Log in</string>
     <string name="txtCorreo">Email</string>
