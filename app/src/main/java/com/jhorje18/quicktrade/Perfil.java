@@ -82,6 +82,7 @@ public class Perfil extends AppCompatActivity {
 
                     //Forzamos a recargar el usuario
                     recargar();
+                    invalidateOptionsMenu();
                     cargarListadoProductos();
                 }
 
@@ -176,6 +177,17 @@ public class Perfil extends AppCompatActivity {
                 startActivity(mostrar);
             }
         });
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (actualUsuario != null) {
+            if (!actualUsuario.getUsuario().equals(user.getDisplayName())) {
+                menu.removeItem(R.id.mnEdit);
+                menu.removeItem(R.id.mnEliminar);
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     //Menu opciones superior

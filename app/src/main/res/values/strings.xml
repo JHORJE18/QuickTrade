@@ -59,4 +59,6 @@
     <string name="txtProfile">Profile</string>
     <string name="txtConfirm_for">Log in to continue...</string>
     <string name="txtProducto">Product</string>
+    <string name="delete_product">Delete product</string>
+    <string name="question_delete_product">Delete your product?</string>
 </resources>
