@@ -39,6 +39,7 @@ public class ProductoView extends AppCompatActivity {
     //Variables
     TextView txtNombre, txtUser, txtDescripcion, txtCategoria, txtPrecio;
     ProgressBar progressBar;
+    String claveProducto;
 
     FirebaseUser user;
     Producto actualProducto;
@@ -51,7 +52,7 @@ public class ProductoView extends AppCompatActivity {
         setContentView(R.layout.activity_producto_view);
 
         //Obtiene Intent del producto a mostrar
-        String claveProducto = getIntent().getStringExtra("clave");
+        claveProducto = getIntent().getStringExtra("clave");
 
         //Vista
         txtNombre = (TextView) findViewById(R.id.txtProductNombre);
@@ -94,7 +95,7 @@ public class ProductoView extends AppCompatActivity {
                 .setMessage(getString(R.string.question_delete_product))
                 .setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //TODO Eliminar producto actual
+                        //Elimina producto actual
                         refProducto.removeValue();
                         Toast.makeText(ProductoView.this, getString(R.string.deleted_products), Toast.LENGTH_SHORT).show();
                         finish();
@@ -134,7 +135,10 @@ public class ProductoView extends AppCompatActivity {
                 dialogoEliminar.show();
                 break;
             case R.id.mnEdit:
-                //TODO Editar producto
+                //Procede a editar articulo con la clave del producto
+                Intent ediarProduct = new Intent(ProductoView.this,EditarProducto.class);
+                ediarProduct.putExtra("clave",claveProducto);
+                startActivity(ediarProduct);
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -61,4 +61,7 @@
     <string name="txtProducto">Product</string>
     <string name="delete_product">Delete product</string>
     <string name="question_delete_product">Delete your product?</string>
+    <string name="edit_product">Edit product</string>
+    <string name="edit_description_changed">Description changed</string>
+    <string name="edit_price_changed">Price changed to</string>
 </resources>

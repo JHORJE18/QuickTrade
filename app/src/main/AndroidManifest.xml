@@ -40,8 +40,11 @@
         <activity
             android:name=".ProductoView"
             android:label="@string/txtProducto" />
-        <activity android:name=".NuevoProducto"
+        <activity
+            android:name=".NuevoProducto"
             android:label="@string/add_product" />
+        <activity android:name=".EditarProducto"
+            android:label="@string/edit_product" />
     </application>
 
 </manifest>
