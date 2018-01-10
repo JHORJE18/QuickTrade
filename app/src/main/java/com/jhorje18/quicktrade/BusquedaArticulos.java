@@ -2,12 +2,14 @@ package com.jhorje18.quicktrade;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,14 +38,6 @@ public class BusquedaArticulos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_busqueda_articulos);
-
-        //Si tiene que mostrar una categoria muestrala
-        String categoria = getIntent().getExtras().getString("categoria",null);
-
-        if (categoria != null){
-            //Aplicar categoria a mostrar
-            cargarProductos(categoria);
-        }
 
         //Vista
         spnCategorias = (Spinner) findViewById(R.id.spnCategoriasFiltros);
@@ -87,6 +81,27 @@ public class BusquedaArticulos extends AppCompatActivity {
 
             }
         });
+
+        //Si tiene que mostrar una categoria muestrala
+        String categoriaRecibe = getIntent().getStringExtra("categoria");
+
+        if (categoriaRecibe != null){
+            //Aplicar categoria a mostrar
+            cargarProductos(categoriaRecibe);
+            //Buscamos categoria en el List
+            spnCategorias.setSelection(posicionCategoria(categoriaRecibe));
+        }
+    }
+
+    private int posicionCategoria(String categoriaRecibe) {
+        for (int i=0; i<listaCategorias.size(); i++){
+            Toast.makeText(this, "Comparando " + categoriaRecibe + " VS " + listaCategorias.get(i), Toast.LENGTH_SHORT).show();
+            if (categoriaRecibe.equals(listaCategorias.get(i))){
+                //Se ha encontrado!
+                return i;
+            }
+        }
+        return 0;
     }
 
     public void cargarProductos(String categoria){

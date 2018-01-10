@@ -106,6 +106,16 @@ public class ProductoView extends AppCompatActivity {
                     }
                 });
 
+        //Evento mostrar categorias
+        txtCategoria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cargarCategoria = new Intent(ProductoView.this, BusquedaArticulos.class);
+                String categoriaEnviar = txtCategoria.getText().toString().replace("#","");
+                cargarCategoria.putExtra("categoria", categoriaEnviar);
+                startActivity(cargarCategoria);
+            }
+        });
     }
 
     @Override
