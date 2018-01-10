@@ -95,7 +95,6 @@ public class BusquedaArticulos extends AppCompatActivity {
 
     private int posicionCategoria(String categoriaRecibe) {
         for (int i=0; i<listaCategorias.size(); i++){
-            Toast.makeText(this, "Comparando " + categoriaRecibe + " VS " + listaCategorias.get(i), Toast.LENGTH_SHORT).show();
             if (categoriaRecibe.equals(listaCategorias.get(i))){
                 //Se ha encontrado!
                 return i;
