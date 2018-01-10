@@ -137,7 +137,6 @@ public class BusquedaArticulos extends AppCompatActivity {
     }
 
     public void onClick(View v){
-        //TODO Añadir evento click boton aplicar
         switch (v.getId()){
             case R.id.btnFiltrar:
                 cargarProductos((String) spnCategorias.getSelectedItem());

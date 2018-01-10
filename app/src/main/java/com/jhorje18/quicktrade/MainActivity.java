@@ -101,8 +101,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //TODO Pantalla para mostrar con filtro de categoria de productos
-
         //Evento click en producto
         vistaProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

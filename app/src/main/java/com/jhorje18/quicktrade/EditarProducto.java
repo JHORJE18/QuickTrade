@@ -130,6 +130,12 @@ public class EditarProducto extends AppCompatActivity {
                         Toast.makeText(this, getString(R.string.edit_description_changed) + " " + editDescripcion.getText().toString(), Toast.LENGTH_SHORT).show();
                     }
 
+                    //Categoria
+                    if (!((String) spnCategorias.getSelectedItem()).equals(actualProducto.getCategoria())){
+                        cambiarValor("categoria",(String) spnCategorias.getSelectedItem());
+                        Toast.makeText(this, getString(R.string.edit_category_changed) + " " + (String) spnCategorias.getSelectedItem(), Toast.LENGTH_SHORT).show();
+                    }
+
                     //Precio
                     if (!editPrecio.getText().toString().equals(actualProducto.getPrecio())){
                         cambiarValor("precio",editPrecio.getText().toString());

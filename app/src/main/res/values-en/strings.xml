@@ -65,4 +65,5 @@
     <string name="edit_description_changed">Description changed</string>
     <string name="edit_price_changed">Price changed to</string>
     <string name="filtros">Filters</string>
+    <string name="edit_category_changed">Category changed</string>
 </resources>
