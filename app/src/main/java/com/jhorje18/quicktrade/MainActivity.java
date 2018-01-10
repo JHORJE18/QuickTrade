@@ -155,6 +155,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.mnEstadisticas:
                 startActivity(new Intent(this, Estadisticas.class));
                 break;
+            case R.id.mnFiltros:
+                startActivity(new Intent(this,BusquedaArticulos.class));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

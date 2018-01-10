@@ -64,4 +64,5 @@
     <string name="edit_product">Editar producto</string>
     <string name="edit_description_changed">Descripción cambiada</string>
     <string name="edit_price_changed">"Precio cambiado a "</string>
+    <string name="filtros">Filtros</string>
 </resources>

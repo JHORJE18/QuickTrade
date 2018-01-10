@@ -43,8 +43,10 @@
         <activity
             android:name=".NuevoProducto"
             android:label="@string/add_product" />
-        <activity android:name=".EditarProducto"
+        <activity
+            android:name=".EditarProducto"
             android:label="@string/edit_product" />
+        <activity android:name=".BusquedaArticulos"></activity>
     </application>
 
 </manifest>
