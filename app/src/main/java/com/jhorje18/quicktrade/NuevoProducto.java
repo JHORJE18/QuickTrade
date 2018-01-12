@@ -42,9 +42,11 @@ public class NuevoProducto extends AppCompatActivity {
     //Variables
     Spinner spnCategorias;
     EditText editNombre, editDescripción, editPrecio;
+    ImageView imgProducto;
 
     ArrayList<String> listaCategorias;
     DatabaseReference bbddCategorias, bbddProductos;
+    Bitmap imagenBTMP;
     FirebaseUser user;
     FirebaseStorage storage;
     StorageReference imagenesRef;
@@ -59,6 +61,7 @@ public class NuevoProducto extends AppCompatActivity {
         editNombre = (EditText) findViewById(R.id.editNuevoProductNombre);
         editDescripción = (EditText) findViewById(R.id.editNuevoProductDescripcion);
         editPrecio = (EditText) findViewById(R.id.editNuevoProductPrecio);
+        imgProducto = (ImageView) findViewById(R.id.imgNuevoProducto);
 
         //Iniciamos ArrayList
         listaCategorias = new ArrayList<String>();
@@ -72,7 +75,7 @@ public class NuevoProducto extends AppCompatActivity {
 
         //Conectar almacenamiento online
         storage = FirebaseStorage.getInstance();
-        imagenesRef = FirebaseStorage.getInstance().getReference();
+        imagenesRef = FirebaseStorage.getInstance().getReference("/imagenes/productos");
 
         //Listado categorias
         bbddCategorias.addValueEventListener(new ValueEventListener() {
@@ -104,6 +107,7 @@ public class NuevoProducto extends AppCompatActivity {
         });
     }
 
+    //Botones
     public void onClick(View v){
         switch (v.getId()){
             case R.id.btnNuevoProductoGuardar:
@@ -115,9 +119,19 @@ public class NuevoProducto extends AppCompatActivity {
             case R.id.btnNuevoProductoCancelar:
                 finish();
                 break;
+            case R.id.imgNuevoProducto:
+                //Inicia seleccionar imagen
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(
+                        Intent.createChooser(intent, "Seleccione una imagen"),
+                        1);
+                break;
         }
     }
 
+    //Procede a guardar producto
     private void guardarProducto(){
         //Preparamos valores
         String usuario = user.getDisplayName();
@@ -135,47 +149,41 @@ public class NuevoProducto extends AppCompatActivity {
         //Insertamos registro
         bbddProductos.child(clave).setValue(nuevoProducto);
 
+        //Subimos imagen
+        subirImagen(clave);
+
         Toast.makeText(this, getString(R.string.add_product) + " " + nuevoProducto.getNombre(), Toast.LENGTH_LONG).show();
 
         finish();
     }
 
-    private void subirImagen(Bitmap bmp){
-        StorageReference mountainImagesRef = imagenesRef.child("imagenes/default.jpg");
+    //Sube imagen
+    private void subirImagen(String claveProducto){
+        StorageReference mountainsRef = imagenesRef.child("/" + claveProducto + ".jpg");
 
-        Bitmap bitmap = bmp;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        imagenBTMP.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
-        UploadTask uploadTask = mountainImagesRef.putBytes(data);
+        UploadTask uploadTask = mountainsRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
-                Toast.makeText(NuevoProducto.this, "ERROR: " + exception.getCause().toString(), Toast.LENGTH_SHORT).show();
+                Log.d("#ERROR", "Fallo en la subida " + exception.getCause().toString());
+                Log.d("#ERROR", "Fallo en la subida " + exception.getLocalizedMessage());
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                Toast.makeText(NuevoProducto.this, "Se ha subido!", Toast.LENGTH_SHORT).show();
+                Log.d("#ERROR", "Exito! " + taskSnapshot.getBytesTransferred());
             }
         });
-
     }
 
-    //IMAGEN
-    public void abrirGaleria(View v){
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(
-                Intent.createChooser(intent, "Seleccione una imagen"),
-                1);
-    }
-
+    //Al recibir una imagen seleccionada
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
@@ -202,8 +210,9 @@ public class NuevoProducto extends AppCompatActivity {
                             // Transformamos la URI de la imagen a inputStream y este a un Bitmap
                             Bitmap bmp = BitmapFactory.decodeStream(imageStream);
 
-                            subirImagen(bmp);
-
+                            //Establece imagen a la cargada
+                            imagenBTMP = bmp;
+                            imgProducto.setImageBitmap(imagenBTMP);
                         }
                     }
                 }
