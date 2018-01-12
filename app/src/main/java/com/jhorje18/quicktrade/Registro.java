@@ -37,6 +37,7 @@ public class Registro extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     DatabaseReference bbdd;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,7 +171,7 @@ public class Registro extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), getString(R.string.user) + nuevo.getUsuario() + " registed", Toast.LENGTH_LONG).show();
 
         //Añadimos info perfil
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(editUsuario.getText().toString())

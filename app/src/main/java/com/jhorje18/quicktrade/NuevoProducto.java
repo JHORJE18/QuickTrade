@@ -1,13 +1,23 @@
 package com.jhorje18.quicktrade;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -15,9 +25,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.jhorje18.quicktrade.model.Categoria;
 import com.jhorje18.quicktrade.model.Producto;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class NuevoProducto extends AppCompatActivity {
@@ -29,6 +46,8 @@ public class NuevoProducto extends AppCompatActivity {
     ArrayList<String> listaCategorias;
     DatabaseReference bbddCategorias, bbddProductos;
     FirebaseUser user;
+    FirebaseStorage storage;
+    StorageReference imagenesRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +69,10 @@ public class NuevoProducto extends AppCompatActivity {
 
         //Obten usuario sesión actual
         user = FirebaseAuth.getInstance().getCurrentUser();
+
+        //Conectar almacenamiento online
+        storage = FirebaseStorage.getInstance();
+        imagenesRef = FirebaseStorage.getInstance().getReference();
 
         //Listado categorias
         bbddCategorias.addValueEventListener(new ValueEventListener() {
@@ -115,6 +138,77 @@ public class NuevoProducto extends AppCompatActivity {
         Toast.makeText(this, getString(R.string.add_product) + " " + nuevoProducto.getNombre(), Toast.LENGTH_LONG).show();
 
         finish();
+    }
+
+    private void subirImagen(Bitmap bmp){
+        StorageReference mountainImagesRef = imagenesRef.child("imagenes/default.jpg");
+
+        Bitmap bitmap = bmp;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = mountainImagesRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Toast.makeText(NuevoProducto.this, "ERROR: " + exception.getCause().toString(), Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                Toast.makeText(NuevoProducto.this, "Se ha subido!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    //IMAGEN
+    public void abrirGaleria(View v){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(
+                Intent.createChooser(intent, "Seleccione una imagen"),
+                1);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        Uri selectedImageUri = null;
+        Uri selectedImage;
+
+        String filePath = null;
+        switch (requestCode) {
+            case 1:
+                if (resultCode == Activity.RESULT_OK) {
+                    selectedImage = imageReturnedIntent.getData();
+                    String selectedPath=selectedImage.getPath();
+                    if (requestCode == 1) {
+
+                        if (selectedPath != null) {
+                            InputStream imageStream = null;
+                            try {
+                                imageStream = getContentResolver().openInputStream(
+                                        selectedImage);
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+
+                            // Transformamos la URI de la imagen a inputStream y este a un Bitmap
+                            Bitmap bmp = BitmapFactory.decodeStream(imageStream);
+
+                            subirImagen(bmp);
+
+                        }
+                    }
+                }
+                break;
+        }
     }
 
     private boolean validarDatos(){

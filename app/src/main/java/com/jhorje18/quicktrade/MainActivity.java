@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 .setMessage(getString(R.string.question_logout))
                 .setPositiveButton(getString(R.string.cerrar_sesion), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        //Cierra sesión
                         FirebaseAuth.getInstance().signOut();
                         recargar();
                     }
