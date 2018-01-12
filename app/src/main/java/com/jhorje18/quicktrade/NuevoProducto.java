@@ -149,8 +149,10 @@ public class NuevoProducto extends AppCompatActivity {
         //Insertamos registro
         bbddProductos.child(clave).setValue(nuevoProducto);
 
-        //Subimos imagen
-        subirImagen(clave);
+        //Subimos imagen si ha seleccionado alguna
+        if (imagenBTMP != null){
+            subirImagen(clave);
+        }
 
         Toast.makeText(this, getString(R.string.add_product) + " " + nuevoProducto.getNombre(), Toast.LENGTH_LONG).show();
 

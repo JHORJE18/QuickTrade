@@ -46,6 +46,9 @@ public class ProductoView extends AppCompatActivity {
     DatabaseReference refProducto;
     AlertDialog.Builder dialogoEliminar;
 
+    //TODO Cargar imagenes BBDD
+    //https://firebase.google.com/docs/storage/android/download-files?authuser=0
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
