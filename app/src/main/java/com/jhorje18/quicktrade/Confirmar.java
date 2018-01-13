@@ -180,7 +180,7 @@ public class Confirmar extends AppCompatActivity {
                                         String clave = dataSnapshot1.getKey();
                                         DatabaseReference ref = bbddProductos.child(clave);
 
-                                        //TODO Eliminar imagenes
+                                        //Eliminar imagenes
                                         StorageReference imagenesRef = FirebaseStorage.getInstance().getReference("/imagenes/productos/" + clave + ".jpg");
                                         imagenesRef.delete();
 
