@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class Confirmar extends AppCompatActivity {
 
@@ -177,6 +179,10 @@ public class Confirmar extends AppCompatActivity {
                                         //Eliminamos este producto
                                         String clave = dataSnapshot1.getKey();
                                         DatabaseReference ref = bbddProductos.child(clave);
+
+                                        //TODO Eliminar imagenes
+                                        StorageReference imagenesRef = FirebaseStorage.getInstance().getReference("/imagenes/productos/" + clave + ".jpg");
+                                        imagenesRef.delete();
 
                                         ref.removeValue();
                                         Log.i("#FUNCTION","Producto con clave " + clave + " eliminado");
