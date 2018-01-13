@@ -18,6 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.jhorje18.quicktrade.model.Producto;
 
 import java.io.IOException;
@@ -39,15 +44,14 @@ public class ProductoView extends AppCompatActivity {
     //Variables
     TextView txtNombre, txtUser, txtDescripcion, txtCategoria, txtPrecio;
     ProgressBar progressBar;
+    ImageView imgView;
     String claveProducto;
 
     FirebaseUser user;
     Producto actualProducto;
     DatabaseReference refProducto;
+    StorageReference imagenesRef;
     AlertDialog.Builder dialogoEliminar;
-
-    //TODO Cargar imagenes BBDD
-    //https://firebase.google.com/docs/storage/android/download-files?authuser=0
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,7 @@ public class ProductoView extends AppCompatActivity {
         txtCategoria = (TextView) findViewById(R.id.txtProductCategoria);
         txtPrecio = (TextView) findViewById(R.id.txtProductPrecio);
         progressBar = (ProgressBar) findViewById(R.id.progressProductoLoad);
+        imgView = (ImageView) findViewById(R.id.imgProductView);
 
         //Si no ha recibido nada sacalo de esta pantalla
         if (claveProducto.isEmpty()) {
@@ -74,6 +79,9 @@ public class ProductoView extends AppCompatActivity {
         //Obtener usuario actual
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        //Obtener conexion almacenamiento
+        imagenesRef = FirebaseStorage.getInstance().getReference("/imagenes/productos");
+
         //Obtener producto!
         refProducto = FirebaseDatabase.getInstance().getReference("productos/" + claveProducto);
         refProducto.addValueEventListener(new ValueEventListener() {
@@ -81,6 +89,7 @@ public class ProductoView extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 actualProducto = dataSnapshot.getValue(Producto.class);
                 progressBar.setVisibility(View.GONE);
+                cargarImagen();
                 recargarVista();
                 invalidateOptionsMenu();
             }
@@ -119,6 +128,24 @@ public class ProductoView extends AppCompatActivity {
                 startActivity(cargarCategoria);
             }
         });
+    }
+
+    //Carga de imagenes
+    private void cargarImagen() {
+        //TODO Comprobar que existe fichero
+
+        StorageReference imgRefProduct = imagenesRef.child(claveProducto + ".jpg");
+
+        //Comprueba si existe imagen
+        Log.d("#VARIABLE",imgRefProduct.getPath());
+
+        //Cargar imagen usando Glide
+        Glide.with(this)
+                .using(new FirebaseImageLoader())
+                .load(imgRefProduct)
+                .into(imgView);
+
+        imgView.setVisibility(View.VISIBLE);
     }
 
     @Override
