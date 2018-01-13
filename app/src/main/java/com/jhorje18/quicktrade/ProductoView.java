@@ -18,6 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.jhorje18.quicktrade.model.Producto;
 
 import java.io.IOException;
@@ -39,10 +44,13 @@ public class ProductoView extends AppCompatActivity {
     //Variables
     TextView txtNombre, txtUser, txtDescripcion, txtCategoria, txtPrecio;
     ProgressBar progressBar;
+    ImageView imgView;
+    String claveProducto;
 
     FirebaseUser user;
     Producto actualProducto;
     DatabaseReference refProducto;
+    StorageReference imagenesRef;
     AlertDialog.Builder dialogoEliminar;
 
     @Override
@@ -51,7 +59,7 @@ public class ProductoView extends AppCompatActivity {
         setContentView(R.layout.activity_producto_view);
 
         //Obtiene Intent del producto a mostrar
-        String claveProducto = getIntent().getStringExtra("clave");
+        claveProducto = getIntent().getStringExtra("clave");
 
         //Vista
         txtNombre = (TextView) findViewById(R.id.txtProductNombre);
@@ -60,6 +68,7 @@ public class ProductoView extends AppCompatActivity {
         txtCategoria = (TextView) findViewById(R.id.txtProductCategoria);
         txtPrecio = (TextView) findViewById(R.id.txtProductPrecio);
         progressBar = (ProgressBar) findViewById(R.id.progressProductoLoad);
+        imgView = (ImageView) findViewById(R.id.imgProductView);
 
         //Si no ha recibido nada sacalo de esta pantalla
         if (claveProducto.isEmpty()) {
@@ -70,6 +79,9 @@ public class ProductoView extends AppCompatActivity {
         //Obtener usuario actual
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        //Obtener conexion almacenamiento
+        imagenesRef = FirebaseStorage.getInstance().getReference("/imagenes/productos");
+
         //Obtener producto!
         refProducto = FirebaseDatabase.getInstance().getReference("productos/" + claveProducto);
         refProducto.addValueEventListener(new ValueEventListener() {
@@ -77,6 +89,7 @@ public class ProductoView extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 actualProducto = dataSnapshot.getValue(Producto.class);
                 progressBar.setVisibility(View.GONE);
+                cargarImagen();
                 recargarVista();
                 invalidateOptionsMenu();
             }
@@ -94,7 +107,7 @@ public class ProductoView extends AppCompatActivity {
                 .setMessage(getString(R.string.question_delete_product))
                 .setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //TODO Eliminar producto actual
+                        //Elimina producto actual
                         refProducto.removeValue();
                         Toast.makeText(ProductoView.this, getString(R.string.deleted_products), Toast.LENGTH_SHORT).show();
                         finish();
@@ -105,6 +118,34 @@ public class ProductoView extends AppCompatActivity {
                     }
                 });
 
+        //Evento mostrar categorias
+        txtCategoria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cargarCategoria = new Intent(ProductoView.this, BusquedaArticulos.class);
+                String categoriaEnviar = txtCategoria.getText().toString().replace("#","");
+                cargarCategoria.putExtra("categoria", categoriaEnviar);
+                startActivity(cargarCategoria);
+            }
+        });
+    }
+
+    //Carga de imagenes
+    private void cargarImagen() {
+        //TODO Comprobar que existe fichero
+
+        StorageReference imgRefProduct = imagenesRef.child(claveProducto + ".jpg");
+
+        //Comprueba si existe imagen
+        Log.d("#VARIABLE",imgRefProduct.getPath());
+
+        //Cargar imagen usando Glide
+        Glide.with(this)
+                .using(new FirebaseImageLoader())
+                .load(imgRefProduct)
+                .into(imgView);
+
+        imgView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -134,7 +175,10 @@ public class ProductoView extends AppCompatActivity {
                 dialogoEliminar.show();
                 break;
             case R.id.mnEdit:
-                //TODO Editar producto
+                //Procede a editar articulo con la clave del producto
+                Intent ediarProduct = new Intent(ProductoView.this,EditarProducto.class);
+                ediarProduct.putExtra("clave",claveProducto);
+                startActivity(ediarProduct);
                 break;
         }
         return super.onOptionsItemSelected(item);

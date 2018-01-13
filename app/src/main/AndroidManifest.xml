@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jhorje18.quicktrade">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/carrito"
@@ -40,8 +43,13 @@
         <activity
             android:name=".ProductoView"
             android:label="@string/txtProducto" />
-        <activity android:name=".NuevoProducto"
+        <activity
+            android:name=".NuevoProducto"
             android:label="@string/add_product" />
+        <activity
+            android:name=".EditarProducto"
+            android:label="@string/edit_product" />
+        <activity android:name=".BusquedaArticulos" />
     </application>
 
 </manifest>

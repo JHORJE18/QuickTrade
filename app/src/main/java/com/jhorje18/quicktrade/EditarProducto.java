@@ -9,17 +9,21 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,52 +36,63 @@ import com.jhorje18.quicktrade.model.Categoria;
 import com.jhorje18.quicktrade.model.Producto;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class NuevoProducto extends AppCompatActivity {
+public class EditarProducto extends AppCompatActivity {
 
     //Variables
+    EditText editNombre, editDescripcion, editPrecio;
     Spinner spnCategorias;
-    EditText editNombre, editDescripción, editPrecio;
-    ImageView imgProducto;
+    ImageView imgView;
+    ProgressBar progressBar;
 
-    ArrayList<String> listaCategorias;
-    DatabaseReference bbddCategorias, bbddProductos;
+    Producto actualProducto;
     Bitmap imagenBTMP;
-    FirebaseUser user;
-    FirebaseStorage storage;
-    StorageReference imagenesRef;
+    ArrayList<String> listaCategorias;
+    String claveProducto;
+    DatabaseReference refProducto, bbddCategorias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nuevo_producto);
+        setContentView(R.layout.activity_editar_producto);
 
         //Vista
-        spnCategorias = (Spinner) findViewById(R.id.spnNuevoProductCategorias);
-        editNombre = (EditText) findViewById(R.id.editNuevoProductNombre);
-        editDescripción = (EditText) findViewById(R.id.editNuevoProductDescripcion);
-        editPrecio = (EditText) findViewById(R.id.editNuevoProductPrecio);
-        imgProducto = (ImageView) findViewById(R.id.imgNuevoProducto);
+        editNombre = (EditText) findViewById(R.id.editEditProductNombre);
+        editDescripcion = (EditText) findViewById(R.id.editEditProductDescripcion);
+        editPrecio = (EditText) findViewById(R.id.editEditProductPrecio);
+        spnCategorias = (Spinner) findViewById(R.id.spnEditProductCategoria);
+        imgView = (ImageView) findViewById(R.id.imgEditProducto);
+        progressBar = (ProgressBar) findViewById(R.id.progresEditProduct);
 
-        //Iniciamos ArrayList
+        //Obtiene clave del producto
+        claveProducto = getIntent().getStringExtra("clave");
+
+        //Iniciamos arrayList
         listaCategorias = new ArrayList<String>();
 
-        //Obtenemos BBDD Firebase
+        //Cargamos producto
+        refProducto = FirebaseDatabase.getInstance().getReference("productos/" + claveProducto);
+        refProducto.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                actualProducto = dataSnapshot.getValue(Producto.class);
+                progressBar.setVisibility(View.GONE);
+
+                cargarImagen();
+                recargarVista();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        //Cargamos categorias
         bbddCategorias = FirebaseDatabase.getInstance().getReference("categorias");
-        bbddProductos = FirebaseDatabase.getInstance().getReference("productos");
-
-        //Obten usuario sesión actual
-        user = FirebaseAuth.getInstance().getCurrentUser();
-
-        //Conectar almacenamiento online
-        storage = FirebaseStorage.getInstance();
-        imagenesRef = FirebaseStorage.getInstance().getReference("/imagenes/productos");
-
-        //Listado categorias
         bbddCategorias.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -105,21 +120,75 @@ public class NuevoProducto extends AppCompatActivity {
 
             }
         });
+
     }
 
-    //Botones
+    private void recargarVista() {
+        //Recargamos elementos vista
+        if (actualProducto != null){
+            editNombre.setText(actualProducto.getNombre());
+            editDescripcion.setText(actualProducto.getDescripcion());
+            editPrecio.setText(actualProducto.getPrecio());
+        }
+    }
+
+    //Carga de imagenes
+    private void cargarImagen() {
+        //TODO Comprobar que existe fichero
+
+        StorageReference imagenesRef = FirebaseStorage.getInstance().getReference("/imagenes/productos/" + claveProducto + ".jpg");
+
+        //Comprueba si existe imagen
+        Log.d("#VARIABLE",imagenesRef.getPath());
+
+        //Cargar imagen usando Glide
+        Glide.with(this)
+                .using(new FirebaseImageLoader())
+                .load(imagenesRef)
+                .into(imgView);
+
+        imgView.setVisibility(View.VISIBLE);
+    }
+
     public void onClick(View v){
         switch (v.getId()){
-            case R.id.btnNuevoProductoGuardar:
-                //Valida datos y si estan correctos, procede a guardar producto
+            case R.id.btnEditProductGuardar:
+                Toast.makeText(this, "Guardando", Toast.LENGTH_SHORT).show();
                 if (validarDatos()){
-                    guardarProducto();
+                    //Procedemos a editar producto
+
+                    //Nombre
+                    if (!editNombre.getText().toString().equals(actualProducto.getNombre())){
+                        cambiarValor("nombre",editNombre.getText().toString());
+                        Toast.makeText(this, getString(R.string.edit_name_changed) + " " + editNombre.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    //Descripción
+                    if (!editDescripcion.getText().toString().equals(actualProducto.getDescripcion())){
+                        cambiarValor("descripcion",editDescripcion.getText().toString());
+                        Toast.makeText(this, getString(R.string.edit_description_changed) + " " + editDescripcion.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    //Categoria
+                    if (!((String) spnCategorias.getSelectedItem()).equals(actualProducto.getCategoria())){
+                        cambiarValor("categoria",(String) spnCategorias.getSelectedItem());
+                        Toast.makeText(this, getString(R.string.edit_category_changed) + " " + (String) spnCategorias.getSelectedItem(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    //Precio
+                    if (!editPrecio.getText().toString().equals(actualProducto.getPrecio())){
+                        cambiarValor("precio",editPrecio.getText().toString());
+                        Toast.makeText(this, getString(R.string.edit_price_changed) + " " + editPrecio.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    //Imagen
+                    //Subimos imagen si ha seleccionado alguna
+                    if (imagenBTMP != null){
+                        subirImagen(claveProducto);
+                    }
                 }
                 break;
-            case R.id.btnNuevoProductoCancelar:
-                finish();
-                break;
-            case R.id.imgNuevoProducto:
+            case R.id.imgEditProducto:
                 //Inicia seleccionar imagen
                 Intent intent = new Intent();
                 intent.setType("image/*");
@@ -128,46 +197,24 @@ public class NuevoProducto extends AppCompatActivity {
                         Intent.createChooser(intent, "Seleccione una imagen"),
                         1);
                 break;
+
         }
     }
 
-    //Procede a guardar producto
-    private void guardarProducto(){
-        //Preparamos valores
-        String usuario = user.getDisplayName();
-        String nombre = editNombre.getText().toString();
-        String descripcion = editDescripción.getText().toString();
-        String categoria = (String) spnCategorias.getSelectedItem();
-        String precio = editPrecio.getText().toString() + "€";
-
-        //Creamos producto local
-        Producto nuevoProducto = new Producto(usuario,nombre,descripcion,categoria,precio);
-
-        //Generamos clave para nuevo registro
-        String clave = bbddCategorias.push().getKey();
-
-        //Insertamos registro
-        bbddProductos.child(clave).setValue(nuevoProducto);
-
-        //Subimos imagen si ha seleccionado alguna
-        if (imagenBTMP != null){
-            subirImagen(clave);
-        }
-
-        Toast.makeText(this, getString(R.string.add_product) + " " + nuevoProducto.getNombre(), Toast.LENGTH_LONG).show();
-
-        finish();
+    private void cambiarValor(String campo, String valor) {
+        //Procedemos a cambiar el valor
+        refProducto.child(campo).setValue(valor);
     }
 
     //Sube imagen
     private void subirImagen(String claveProducto){
-        StorageReference mountainsRef = imagenesRef.child("/" + claveProducto + ".jpg");
+        StorageReference imagenesRef = FirebaseStorage.getInstance().getReference("/imagenes/productos/" + claveProducto + ".jpg");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         imagenBTMP.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
-        UploadTask uploadTask = mountainsRef.putBytes(data);
+        UploadTask uploadTask = imagenesRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
@@ -184,6 +231,7 @@ public class NuevoProducto extends AppCompatActivity {
             }
         });
     }
+
 
     //Al recibir una imagen seleccionada
     protected void onActivityResult(int requestCode, int resultCode,
@@ -214,7 +262,7 @@ public class NuevoProducto extends AppCompatActivity {
 
                             //Establece imagen a la cargada
                             imagenBTMP = bmp;
-                            imgProducto.setImageBitmap(imagenBTMP);
+                            imgView.setImageBitmap(imagenBTMP);
                         }
                     }
                 }
@@ -222,7 +270,8 @@ public class NuevoProducto extends AppCompatActivity {
         }
     }
 
-    private boolean validarDatos(){
+    //Validacion de datos
+    private boolean validarDatos() {
         //Validar Nombre
         boolean valido = true;
 
@@ -232,8 +281,8 @@ public class NuevoProducto extends AppCompatActivity {
         }
 
         //Validar Descripción
-        if (editDescripción.getText().toString().isEmpty()){
-            editDescripción.setError(getString(R.string.error_input_descriptionproduct));
+        if (editDescripcion.getText().toString().isEmpty()){
+            editDescripcion.setError(getString(R.string.error_input_descriptionproduct));
             valido = false;
         }
 
@@ -244,5 +293,24 @@ public class NuevoProducto extends AppCompatActivity {
         }
 
         return valido;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_nuevo,menu);
+
+        menu.removeItem(R.id.mnEdit);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.mnCancel:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

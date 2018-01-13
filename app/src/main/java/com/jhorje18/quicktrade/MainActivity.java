@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 .setMessage(getString(R.string.question_logout))
                 .setPositiveButton(getString(R.string.cerrar_sesion), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        //Cierra sesión
                         FirebaseAuth.getInstance().signOut();
                         recargar();
                     }
@@ -100,8 +101,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        //TODO Pantalla para mostrar con filtro de categoria de productos
 
         //Evento click en producto
         vistaProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -154,6 +153,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.mnEstadisticas:
                 startActivity(new Intent(this, Estadisticas.class));
+                break;
+            case R.id.mnFiltros:
+                startActivity(new Intent(this,BusquedaArticulos.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
