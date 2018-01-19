@@ -133,11 +133,10 @@ public class ProductoView extends AppCompatActivity {
     //Carga de imagenes
     private void cargarImagen() {
         //TODO Comprobar que existe fichero
-
         StorageReference imgRefProduct = imagenesRef.child(claveProducto + ".jpg");
 
         //Comprueba si existe imagen
-        Log.d("#VARIABLE",imgRefProduct.getPath());
+        Log.d("#VARIABLE",imgRefProduct.getBucket());
 
         //Cargar imagen usando Glide
         Glide.with(this)
