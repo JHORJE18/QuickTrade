@@ -7,8 +7,8 @@ android {
         applicationId "com.jhorje18.quicktrade"
         minSdkVersion 22
         targetSdkVersion 26
-        versionCode 8
-        versionName "2.9.9"
+        versionCode 9
+        versionName "3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
