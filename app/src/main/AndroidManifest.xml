@@ -50,6 +50,7 @@
             android:name=".EditarProducto"
             android:label="@string/edit_product" />
         <activity android:name=".BusquedaArticulos" />
+        <activity android:name=".MisFavoritos"></activity>
     </application>
 
 </manifest>
