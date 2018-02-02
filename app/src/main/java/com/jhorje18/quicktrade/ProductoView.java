@@ -14,6 +14,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -51,11 +54,12 @@ public class ProductoView extends AppCompatActivity {
     TextView txtNombre, txtUser, txtDescripcion, txtCategoria, txtPrecio;
     ProgressBar progressBar, progressIMG;
     ImageView imgView;
+    CheckBox boxFavorito;
     String claveProducto;
 
     FirebaseUser user;
     Producto actualProducto;
-    DatabaseReference refProducto, bbddUsers;
+    DatabaseReference refProducto, bbddUsers, refFavoritos;
     StorageReference imagenesRef;
     AlertDialog.Builder dialogoEliminar;
 
@@ -76,6 +80,7 @@ public class ProductoView extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressProductoLoad);
         imgView = (ImageView) findViewById(R.id.imgProductView);
         progressIMG = (ProgressBar) findViewById(R.id.progressIMGView);
+        boxFavorito = (CheckBox) findViewById(R.id.boxFavorito);
 
         //Si no ha recibido nada sacalo de esta pantalla
         if (claveProducto.isEmpty()) {
@@ -155,6 +160,21 @@ public class ProductoView extends AppCompatActivity {
 
                     }
                 });
+            }
+        });
+
+        //Evento al darle como favorito
+        refFavoritos = FirebaseDatabase.getInstance().getReference("favoritos/" + user.getDisplayName());
+        //Al marcar nuevo producto como favorito
+        boxFavorito.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    //Marcamos como favorito
+                    refFavoritos.child(claveProducto).setValue(claveProducto);
+                } else {
+                    refFavoritos.child(claveProducto).removeValue();
+                }
             }
         });
     }

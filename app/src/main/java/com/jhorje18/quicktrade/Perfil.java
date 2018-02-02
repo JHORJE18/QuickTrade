@@ -209,6 +209,9 @@ public class Perfil extends AppCompatActivity {
             case R.id.mnEliminar:
                 dialogoEliminar.show();
                 break;
+            case R.id.mnMisFavs:
+                startActivity(new Intent(this,MisFavoritos.class));
+                break;
             case R.id.mnNuevoProducto:
                 startActivity(new Intent(this,NuevoProducto.class));
                 break;
